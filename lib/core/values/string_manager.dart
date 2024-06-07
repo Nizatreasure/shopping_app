@@ -19,7 +19,7 @@ class StringManager {
   static const String reset = 'Reset';
   static const String mostRecent = 'Most Recent';
   static const String lowestPrice = 'Lowest Price';
-  static const String highest = 'Highest Price';
+  static const String highestReviews = 'Highest Reviews';
   static const String man = 'Man';
   static const String woman = 'Woman';
   static const String unisex = 'Unisex';

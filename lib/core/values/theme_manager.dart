@@ -18,6 +18,9 @@ class ThemeManager {
         headlineLarge: _headlineText(fontSize: 24, lineHeight: 24 / 20),
         headlineMedium: _headlineText(fontSize: 20, lineHeight: 20 / 24),
         headlineSmall: _headlineText(fontSize: 16, lineHeight: 16 / 18),
+        titleLarge: _headlineText(fontSize: 14, lineHeight: 14 / 16),
+        titleMedium: _headlineText(fontSize: 12, lineHeight: 12 / 16),
+        titleSmall: _headlineText(fontSize: 10, lineHeight: 10 / 16),
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: ColorManager.white,
@@ -55,11 +58,12 @@ class ThemeManager {
   static TextStyle _headlineText({
     required double fontSize,
     required double lineHeight,
+    FontWeight? fontWeight,
   }) {
     return TextStyle(
       color: ColorManager.primaryDefault500,
       fontSize: fontSize,
-      fontWeight: FontWeight.w600,
+      fontWeight: fontWeight ?? FontWeight.w600,
       fontFamily: AppConstants.fontFamily,
       height: lineHeight,
     );
