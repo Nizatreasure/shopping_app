@@ -1,7 +1,10 @@
 class AppAssetManager {
-  // static const String _imagePath = 'assets/images';
+  static const String _imagePath = 'assets/images';
   static const String _lottiePath = 'assets/lottie';
   static const String _svgPath = 'assets/svg';
+
+  //images
+  static const String preview = '$_imagePath/preview.png';
 
   //svg
   static const String cart = '$_svgPath/cart.svg';

@@ -12,6 +12,7 @@ PreferredSizeWidget appbarWidget(
   bool showBackButton = true,
   void Function()? onTapBackButton,
   double? titleSpacing,
+  PreferredSizeWidget? bottom,
 }) {
   ThemeData themeData = Theme.of(context);
   return AppBar(
@@ -26,18 +27,13 @@ PreferredSizeWidget appbarWidget(
     title: Text(
       title,
       style: largeTitle
-          ? themeData.textTheme.headlineLarge
+          ? themeData.textTheme.headlineLarge!
+              .copyWith(height: 45 / 30, fontSize: 30)
           : themeData.textTheme.titleLarge!,
     ),
     centerTitle: centerTitle,
-    actions: actions != null
-        ? [
-            ...actions,
-            SizedBox(
-              width: 30.r,
-            )
-          ]
-        : null,
+    actions: actions != null ? [...actions, SizedBox(width: 30.r)] : null,
     toolbarHeight: kToolbarHeight + toolbarAdditionalHeight,
+    bottom: bottom,
   );
 }

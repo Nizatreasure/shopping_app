@@ -15,12 +15,12 @@ class ThemeManager {
         bodySmall: _bodyText(fontSize: 12),
         bodyMedium: _bodyText(fontSize: 14),
         bodyLarge: _bodyText(fontSize: 16),
-        headlineLarge: _headlineText(fontSize: 24, lineHeight: 24 / 20),
-        headlineMedium: _headlineText(fontSize: 20, lineHeight: 20 / 24),
-        headlineSmall: _headlineText(fontSize: 16, lineHeight: 16 / 18),
-        titleLarge: _headlineText(fontSize: 14, lineHeight: 14 / 16),
-        titleMedium: _headlineText(fontSize: 12, lineHeight: 12 / 16),
-        titleSmall: _headlineText(fontSize: 10, lineHeight: 10 / 16),
+        headlineLarge: _headlineText(fontSize: 24),
+        headlineMedium: _headlineText(fontSize: 20),
+        headlineSmall: _headlineText(fontSize: 16),
+        titleLarge: _headlineText(fontSize: 14, fontWeight: FontWeight.w500),
+        titleMedium: _headlineText(fontSize: 12, fontWeight: FontWeight.w500),
+        titleSmall: _headlineText(fontSize: 10, fontWeight: FontWeight.w500),
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: ColorManager.white,
@@ -51,21 +51,18 @@ class ThemeManager {
       fontSize: fontSize,
       fontWeight: FontWeight.w400,
       fontFamily: AppConstants.fontFamily,
-      height: fontSize / 24,
     );
   }
 
   static TextStyle _headlineText({
     required double fontSize,
-    required double lineHeight,
     FontWeight? fontWeight,
   }) {
     return TextStyle(
       color: ColorManager.primaryDefault500,
       fontSize: fontSize,
-      fontWeight: fontWeight ?? FontWeight.w600,
+      fontWeight: fontWeight ?? FontWeight.w700,
       fontFamily: AppConstants.fontFamily,
-      height: lineHeight,
     );
   }
 }
