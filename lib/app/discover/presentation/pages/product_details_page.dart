@@ -6,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:shopping_app/app/discover/presentation/widgets/add_to_cart_modal.dart';
+import 'package:shopping_app/app/discover/presentation/widgets/added_to_cart_modal.dart';
 import 'package:shopping_app/app/discover/presentation/widgets/product_review_widget.dart';
 import 'package:shopping_app/core/common/widgets/app_button_widget.dart';
 import 'package:shopping_app/core/common/widgets/appbar_widget.dart';
@@ -27,6 +29,7 @@ class ProductDetailsPage extends StatelessWidget {
     ThemeData themeData = Theme.of(context);
     double bottomPadding = MediaQuery.of(context).viewPadding.bottom;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: appbarWidget(
         context,
         title: '',
@@ -54,13 +57,14 @@ class ProductDetailsPage extends StatelessWidget {
               ),
             ),
           ),
-          _buildBottomPageWidget(themeData, bottomPadding),
+          _buildBottomPageWidget(context, themeData, bottomPadding),
         ],
       ),
     );
   }
 
-  Widget _buildBottomPageWidget(ThemeData themeData, double bottomPadding) {
+  Widget _buildBottomPageWidget(
+      BuildContext context, ThemeData themeData, double bottomPadding) {
     return Container(
       height: 90.r + bottomPadding,
       decoration: BoxDecoration(
@@ -106,6 +110,12 @@ class ProductDetailsPage extends StatelessWidget {
               text: StringManager.addToCart.toUpperCase(),
               shrinkToFitChildSize: true,
               padding: EdgeInsetsDirectional.symmetric(horizontal: 31.5.r),
+              onTap: () async {
+                bool success = await addToCart(context);
+                if (success && context.mounted) {
+                  addedToCart(context);
+                }
+              },
             )
           ],
         ),
@@ -207,5 +217,25 @@ class ProductDetailsPage extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<bool> addToCart(BuildContext context) async {
+    bool? successful = await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height -
+              MediaQuery.of(context).viewPadding.top -
+              20.r),
+      builder: (context) {
+        return const AddToCartModal();
+      },
+    );
+    return successful == true;
+  }
+
+  void addedToCart(BuildContext context) {
+    showModalBottomSheet(
+        context: context, builder: (context) => const AddedToCartModal());
   }
 }

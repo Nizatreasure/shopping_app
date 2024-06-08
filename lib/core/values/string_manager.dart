@@ -9,7 +9,7 @@ class StringManager {
   static const String price = 'Price';
   static const String description = 'Description';
   static const String seeAllReview = 'See All Review';
-  static const String addToCart = 'Add To Cart';
+  static const String addToCart = 'Add to cart';
   static const String brands = 'Brands';
   static const String priceRange = 'Price Range';
   static const String sortBy = 'Sort By';

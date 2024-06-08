@@ -24,6 +24,8 @@ class AppAssetManager {
   static const String heartFilled = '$_svgPath/heart-filled.svg';
   static const String heartEmpty = '$_svgPath/heart-empty.svg';
   static const String tickCircle = '$_svgPath/tick-circle.svg';
+  static const String minusCircle = '$_svgPath/minus-circle.svg';
+  static const String addCircle = '$_svgPath/add-circle.svg';
 
   //lottie
   static const String successLottie = '$_lottiePath/success.json';
