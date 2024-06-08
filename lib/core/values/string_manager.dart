@@ -48,5 +48,6 @@ class StringManager {
   static const String totalOrder = 'Total Order';
   static const String payment = 'Payment';
   static const String qty = 'Qty';
+  static const String cart = 'Cart';
   // static const String _!dfdsf = '';
 }

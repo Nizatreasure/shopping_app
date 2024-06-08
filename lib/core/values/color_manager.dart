@@ -23,4 +23,5 @@ class ColorManager {
   static const Color transparent = Colors.transparent;
   static const Color lightGrey = Color(0xffD7D7D7);
   static const Color grey = Color(0xffAAAAAA);
+  static const Color secondaryDarkGrey = Color(0xff666666);
 }
