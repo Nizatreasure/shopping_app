@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shopping_app/app/discover/data/models/item_preview_model.dart';
 import 'package:shopping_app/core/common/widgets/appbar_widget.dart';
 import 'package:shopping_app/core/common/widgets/cart_widget.dart';
+import 'package:shopping_app/core/routes/router.dart';
 import 'package:shopping_app/core/values/asset_manager.dart';
 import 'package:shopping_app/core/values/color_manager.dart';
 import 'package:shopping_app/core/values/string_manager.dart';

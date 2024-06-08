@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shopping_app/app/discover/presentation/pages/product_details_page.dart';
 import 'package:shopping_app/main.dart';
 
 import '../../app/discover/presentation/pages/discover_page.dart';
@@ -16,6 +17,15 @@ class MyAppRouter {
         pageBuilder: (context, state) {
           return const MaterialPage(child: DiscoverPage());
         },
+        routes: [
+          GoRoute(
+            path: RouteNames.productDetails,
+            name: RouteNames.productDetails,
+            pageBuilder: (context, state) {
+              return const MaterialPage(child: ProductDetailsPage());
+            },
+          ),
+        ],
       ),
     ],
   );

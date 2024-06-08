@@ -7,58 +7,61 @@ class ItemPreviewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
-    return SizedBox(
-      height: 225.r,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.r),
-                    color: ColorManager.primaryDefault500.withOpacity(0.05),
+    return GestureDetector(
+      onTap: () => context.pushNamed(RouteNames.productDetails),
+      child: SizedBox(
+        height: 225.r,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                      color: ColorManager.primaryDefault500.withOpacity(0.05),
+                    ),
                   ),
-                ),
-                Positioned(
-                  left: 15.r,
-                  right: 15.r,
-                  bottom: 22.r,
-                  child: Image.asset(AppAssetManager.preview),
-                ),
-                Positioned(
-                  left: 15.r,
-                  top: 15.r,
-                  width: 24.r,
-                  height: 24.r,
-                  child: SvgPicture.asset(
-                    AppAssetManager.adidas,
-                    colorFilter: const ColorFilter.mode(
-                        ColorManager.primaryLight300, BlendMode.srcIn),
+                  Positioned(
+                    left: 15.r,
+                    right: 15.r,
+                    bottom: 22.r,
+                    child: Image.asset(AppAssetManager.preview),
                   ),
-                )
-              ],
+                  Positioned(
+                    left: 15.r,
+                    top: 15.r,
+                    width: 24.r,
+                    height: 24.r,
+                    child: SvgPicture.asset(
+                      AppAssetManager.adidas,
+                      colorFilter: const ColorFilter.mode(
+                          ColorManager.primaryLight300, BlendMode.srcIn),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 10.r),
-          Text(
-            item.name,
-            style: themeData.textTheme.bodySmall!.copyWith(
-                height: 22 / themeData.textTheme.bodySmall!.fontSize!),
-            overflow: TextOverflow.ellipsis,
-          ),
-          SizedBox(height: 5.r),
-          _buildRatingAndReview(themeData),
-          Text(
-            Globals.currencyFormat.format(item.price),
-            style: themeData.textTheme.titleMedium!.copyWith(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-              height: 24 / 14,
+            SizedBox(height: 10.r),
+            Text(
+              item.name,
+              style: themeData.textTheme.bodySmall!.copyWith(
+                  height: 22 / themeData.textTheme.bodySmall!.fontSize!),
+              overflow: TextOverflow.ellipsis,
             ),
-          )
-        ],
+            SizedBox(height: 5.r),
+            _buildRatingAndReview(themeData),
+            Text(
+              Globals.currencyFormat.format(item.price),
+              style: themeData.textTheme.titleMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                height: 24 / 14,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
