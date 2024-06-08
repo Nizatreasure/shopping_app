@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shopping_app/core/constants/constants.dart';
 import 'package:shopping_app/globals.dart';
 
 import 'core/routes/router.dart';
-import 'core/values/string_manager.dart';
 import 'core/values/theme_manager.dart';
 
 void main() async {
@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
           },
           child: MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            title: StringManager.appTitle,
+            title: AppConstants.appTitle,
             routeInformationParser: MyAppRouter.router.routeInformationParser,
             routerDelegate: MyAppRouter.router.routerDelegate,
             routeInformationProvider:

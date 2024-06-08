@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shopping_app/core/common/widgets/app_button_widget.dart';
+import 'package:shopping_app/core/routes/router.dart';
 import 'package:shopping_app/core/values/asset_manager.dart';
 import 'package:shopping_app/core/values/color_manager.dart';
 import 'package:shopping_app/core/values/string_manager.dart';
@@ -82,7 +83,11 @@ class AddedToCartModal extends StatelessWidget {
         Expanded(
           child: AppButtonWidget(
             text: StringManager.toCart.toUpperCase(),
-            onTap: () {},
+            onTap: () {
+              context
+                ..pop()
+                ..pushNamed(RouteNames.cart);
+            },
           ),
         ),
       ],

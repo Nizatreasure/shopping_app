@@ -7,4 +7,5 @@ class RouteNames {
   static const String productReview = 'product_review';
   static const String productFilter = 'product_filter';
   static const String cart = 'cart';
+  static const String orderSummary = 'order_summary';
 }

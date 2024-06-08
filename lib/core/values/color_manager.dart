@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ColorManager {
+  static const Color primaryBlack = Color(0xff160700);
   static const Color primaryBlack900 = Color(0xff070304);
   static const Color primaryBlack800 = Color(0xff090506);
   static const Color primaryBlack700 = Color(0xff0B0808);

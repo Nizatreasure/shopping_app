@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shopping_app/core/common/enums/enums.dart';
 import 'package:shopping_app/core/common/widgets/app_button_widget.dart';
 import 'package:shopping_app/core/common/widgets/appbar_widget.dart';
 import 'package:shopping_app/core/common/widgets/modify_quantity_button.dart';
+import 'package:shopping_app/core/routes/router.dart';
 import 'package:shopping_app/core/values/asset_manager.dart';
 import 'package:shopping_app/core/values/color_manager.dart';
 import 'package:shopping_app/core/values/string_manager.dart';
@@ -92,7 +94,9 @@ class CartPage extends StatelessWidget {
               text: StringManager.checkOut.toUpperCase(),
               shrinkToFitChildSize: true,
               padding: EdgeInsetsDirectional.symmetric(horizontal: 31.5.r),
-              onTap: () async {},
+              onTap: () {
+                context.pushNamed(RouteNames.orderSummary);
+              },
             )
           ],
         ),

@@ -1,5 +1,4 @@
 class StringManager {
-  static const String appTitle = 'Shopping App';
   static const String discover = 'Discover';
   static const String all = 'All';
   static const String reviews = 'Reviews';
@@ -44,7 +43,7 @@ class StringManager {
   static const String orderDetails = 'Order Details';
   static const String paymentDetails = 'Payment Details';
   static const String subTotal = 'Sub Total';
-  static const String shopping = 'Shopping';
+  static const String shipping = 'Shipping';
   static const String totalOrder = 'Total Order';
   static const String payment = 'Payment';
   static const String qty = 'Qty';
