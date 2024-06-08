@@ -34,6 +34,7 @@ class _DiscoverPageState extends State<DiscoverPage>
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    double bottomPadding = MediaQuery.of(context).viewPadding.bottom;
     return Scaffold(
       appBar: appbarWidget(
         context,
@@ -70,8 +71,9 @@ class _DiscoverPageState extends State<DiscoverPage>
               ),
               Expanded(
                 child: GridView.builder(
-                  padding: EdgeInsetsDirectional.symmetric(
-                      horizontal: 30.r, vertical: 15.r),
+                  itemCount: 20,
+                  padding: EdgeInsetsDirectional.fromSTEB(
+                      30.r, 15.r, 30.r, 70.r + bottomPadding),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisExtent: 225.r,
@@ -94,7 +96,7 @@ class _DiscoverPageState extends State<DiscoverPage>
             ],
           ),
           Positioned(
-            bottom: MediaQuery.of(context).viewPadding.bottom,
+            bottom: bottomPadding + 20.r,
             child: _buildFilterButton(themeData),
           ),
         ],

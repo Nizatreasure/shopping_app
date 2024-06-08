@@ -44,7 +44,9 @@ class AppSelectButton extends StatelessWidget {
             : ColorManager.transparent,
         borderColor: selected && !backgroundSelectStyle
             ? ColorManager.primaryDefault500
-            : ColorManager.primaryLight200,
+            : selected
+                ? null
+                : ColorManager.primaryLight200,
         child: child,
       ),
     );

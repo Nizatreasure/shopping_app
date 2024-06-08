@@ -28,13 +28,14 @@ class _ProductReviewPageState extends State<ProductReviewPage>
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    double bottomPadding = MediaQuery.of(context).viewPadding.bottom;
     return Scaffold(
       appBar: appbarWidget(
         context,
         title: '${StringManager.review} (1053)',
         actions: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               SvgPicture.asset(AppAssetManager.starFilled,
                   width: 20.r, height: 20.r),
@@ -42,7 +43,7 @@ class _ProductReviewPageState extends State<ProductReviewPage>
               Text(
                 Globals.ratingFormat.format(4),
                 style: themeData.textTheme.titleLarge!.copyWith(
-                  height: 24 / 14,
+                  height: 20 / 14,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -74,7 +75,8 @@ class _ProductReviewPageState extends State<ProductReviewPage>
           Expanded(
             child: ListView.builder(
               itemCount: 30,
-              padding: EdgeInsetsDirectional.symmetric(horizontal: 30.r),
+              padding:
+                  EdgeInsetsDirectional.fromSTEB(30.r, 0, 30.r, bottomPadding),
               itemBuilder: (context, index) {
                 return const ProductReviewWidget();
               },

@@ -25,6 +25,7 @@ class ProductFilterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    double bottomPadding = MediaQuery.of(context).viewPadding.bottom;
     return Scaffold(
       appBar: appbarWidget(context, title: StringManager.filter),
       body: Column(
@@ -48,15 +49,15 @@ class ProductFilterPage extends StatelessWidget {
               ),
             ),
           ),
-          _buildBottomPageWidget(themeData),
+          _buildBottomPageWidget(themeData, bottomPadding),
         ],
       ),
     );
   }
 
-  Widget _buildBottomPageWidget(ThemeData themeData) {
+  Widget _buildBottomPageWidget(ThemeData themeData, double bottomPadding) {
     return Container(
-      height: 90.r,
+      height: 90.r + bottomPadding,
       decoration: BoxDecoration(
         color: ColorManager.white,
         boxShadow: [
@@ -68,8 +69,9 @@ class ProductFilterPage extends StatelessWidget {
           )
         ],
       ),
-      alignment: Alignment.center,
-      padding: EdgeInsetsDirectional.symmetric(horizontal: 30.r),
+      alignment: Alignment.topCenter,
+      padding:
+          EdgeInsetsDirectional.symmetric(horizontal: 30.r, vertical: 20.r),
       child: Row(
         children: [
           Expanded(
