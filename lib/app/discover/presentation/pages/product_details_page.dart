@@ -39,8 +39,8 @@ class ProductDetailsPage extends StatelessWidget {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsetsDirectional.fromSTEB(
-                  30.r, 10.r, 30.r, MediaQuery.of(context).viewPadding.bottom),
+              padding: EdgeInsetsDirectional.fromSTEB(30.r, 10.r, 30.r,
+                  MediaQuery.of(context).viewPadding.bottom + 30.r),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
