@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:shopping_app/app/discover/presentation/widgets/product_review_widget.dart';
 import 'package:shopping_app/core/common/widgets/app_button_widget.dart';
 import 'package:shopping_app/core/common/widgets/appbar_widget.dart';
 import 'package:shopping_app/core/common/widgets/cart_widget.dart';
+import 'package:shopping_app/core/routes/router.dart';
 import 'package:shopping_app/core/values/asset_manager.dart';
 import 'package:shopping_app/core/values/color_manager.dart';
 import 'package:shopping_app/core/values/string_manager.dart';
@@ -46,7 +48,7 @@ class ProductDetailsPage extends StatelessWidget {
                   SizedBox(height: 30.r),
                   _buildProductDescription(themeData),
                   SizedBox(height: 30.r),
-                  _buildReviews(themeData),
+                  _buildReviews(context, themeData),
                 ],
               ),
             ),
@@ -176,7 +178,7 @@ class ProductDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildReviews(ThemeData themeData) {
+  Widget _buildReviews(BuildContext context, ThemeData themeData) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -197,7 +199,9 @@ class ProductDetailsPage extends StatelessWidget {
           backgroundColor: ColorManager.transparent,
           borderColor: ColorManager.primaryLight200,
           textColor: ColorManager.primaryDefault500,
-          onTap: () {},
+          onTap: () {
+            context.pushNamed(RouteNames.productReview);
+          },
         ),
       ],
     );

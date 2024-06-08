@@ -29,7 +29,11 @@ PreferredSizeWidget appbarWidget(
       style: largeTitle
           ? themeData.textTheme.headlineLarge!
               .copyWith(height: 45 / 30, fontSize: 30)
-          : themeData.textTheme.titleLarge!,
+          : themeData.textTheme.titleLarge!.copyWith(
+              height: 20 / 16,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.2),
     ),
     centerTitle: centerTitle,
     actions: actions != null ? [...actions, SizedBox(width: 30.r)] : null,
