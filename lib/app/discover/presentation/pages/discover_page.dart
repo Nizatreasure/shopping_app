@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shopping_app/app/discover/data/models/item_preview_model.dart';
+import 'package:shopping_app/core/common/widgets/app_button_widget.dart';
 import 'package:shopping_app/core/common/widgets/appbar_widget.dart';
 import 'package:shopping_app/core/common/widgets/cart_widget.dart';
 import 'package:shopping_app/core/routes/router.dart';
@@ -102,13 +103,11 @@ class _DiscoverPageState extends State<DiscoverPage>
   }
 
   Widget _buildFilterButton(ThemeData themeData) {
-    return Container(
+    return AppButtonWidget(
       height: 40.r,
+      shrinkToFitChildSize: true,
       padding: EdgeInsetsDirectional.symmetric(horizontal: 20.r),
-      decoration: BoxDecoration(
-        color: themeData.primaryColor,
-        borderRadius: BorderRadius.circular(100.r),
-      ),
+      onTap: () => context.pushNamed(RouteNames.productFilter),
       child: Row(
         children: [
           Stack(

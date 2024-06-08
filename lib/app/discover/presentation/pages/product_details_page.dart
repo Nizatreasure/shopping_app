@@ -101,7 +101,7 @@ class ProductDetailsPage extends StatelessWidget {
               ),
             ),
             AppButtonWidget(
-              text: StringManager.addToCart,
+              text: StringManager.addToCart.toUpperCase(),
               shrinkToFitChildSize: true,
               padding: EdgeInsetsDirectional.symmetric(horizontal: 31.5.r),
             )
@@ -195,7 +195,7 @@ class ProductDetailsPage extends StatelessWidget {
           }).toList(),
         ),
         AppButtonWidget(
-          text: StringManager.seeAllReview,
+          text: StringManager.seeAllReview.toUpperCase(),
           backgroundColor: ColorManager.transparent,
           borderColor: ColorManager.primaryLight200,
           textColor: ColorManager.primaryDefault500,

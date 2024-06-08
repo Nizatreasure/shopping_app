@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shopping_app/app/discover/presentation/pages/product_details_page.dart';
+import 'package:shopping_app/app/discover/presentation/pages/product_filter_page.dart';
 import 'package:shopping_app/app/discover/presentation/pages/product_review_page.dart';
 import 'package:shopping_app/main.dart';
 
@@ -31,6 +32,13 @@ class MyAppRouter {
             name: RouteNames.productReview,
             pageBuilder: (context, state) {
               return const MaterialPage(child: ProductReviewPage());
+            },
+          ),
+          GoRoute(
+            path: RouteNames.productFilter,
+            name: RouteNames.productFilter,
+            pageBuilder: (context, state) {
+              return const MaterialPage(child: ProductFilterPage());
             },
           ),
         ],

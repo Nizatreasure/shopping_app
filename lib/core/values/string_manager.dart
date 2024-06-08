@@ -17,9 +17,9 @@ class StringManager {
   static const String color = 'Color';
   static const String apply = 'Apply';
   static const String reset = 'Reset';
-  static const String mostRecent = 'Most Recent';
-  static const String lowestPrice = 'Lowest Price';
-  static const String highestReviews = 'Highest Reviews';
+  static const String mostRecent = 'Most recent';
+  static const String lowestPrice = 'Lowest price';
+  static const String highestReviews = 'Highest reviews';
   static const String man = 'Man';
   static const String woman = 'Woman';
   static const String unisex = 'Unisex';

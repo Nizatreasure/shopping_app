@@ -58,7 +58,7 @@ class AppButtonWidget extends StatelessWidget {
         ),
         child: child ??
             Text(
-              text!.toUpperCase(),
+              text!,
               textAlign: TextAlign.center,
               style: themeData.textTheme.titleMedium!.copyWith(
                 color: textColor ?? ColorManager.white,

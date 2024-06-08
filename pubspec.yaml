@@ -46,6 +46,8 @@ dependencies:
   intl: ^0.19.0
   dots_indicator: ^3.0.0
   carousel_slider: ^4.2.1
+  another_xlider:
+    git: https://github.com/Nizatreasure/another_xlider.git
 
 dev_dependencies:
   flutter_test:
