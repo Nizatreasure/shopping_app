@@ -30,10 +30,10 @@ class _CartItemWidgetState extends State<CartItemWidget>
       return Padding(
         padding: EdgeInsetsDirectional.only(bottom: 30.r),
         child: Slidable(
-            groupTag: 'cart-items',
             controller: _slidableController,
+            groupTag: '0',
             endActionPane: ActionPane(
-              motion: const ScrollMotion(),
+              motion: const BehindMotion(),
               extentRatio: 0.2,
               children: [
                 GestureDetector(

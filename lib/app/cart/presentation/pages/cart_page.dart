@@ -25,15 +25,18 @@ class CartPage extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsetsDirectional.only(
-                top: 20.r,
-                bottom: 20.r,
+            child: SlidableAutoCloseBehavior(
+              closeWhenTapped: false,
+              child: ListView.builder(
+                padding: EdgeInsetsDirectional.only(
+                  top: 20.r,
+                  bottom: 20.r,
+                ),
+                itemCount: 8,
+                itemBuilder: (context, index) {
+                  return const CartItemWidget();
+                },
               ),
-              itemCount: 8,
-              itemBuilder: (context, index) {
-                return const CartItemWidget();
-              },
             ),
           ),
           _buildBottomPageWidget(context, themeData, bottomPadding),
