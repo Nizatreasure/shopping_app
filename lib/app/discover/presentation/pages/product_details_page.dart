@@ -5,6 +5,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:shopping_app/app/discover/presentation/widgets/product_review_widget.dart';
+import 'package:shopping_app/core/common/widgets/app_button_widget.dart';
 import 'package:shopping_app/core/common/widgets/appbar_widget.dart';
 import 'package:shopping_app/core/common/widgets/cart_widget.dart';
 import 'package:shopping_app/core/values/asset_manager.dart';
@@ -49,7 +51,60 @@ class ProductDetailsPage extends StatelessWidget {
               ),
             ),
           ),
+          _buildBottomPageWidget(themeData),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBottomPageWidget(ThemeData themeData) {
+    return Container(
+      height: 90.r,
+      decoration: BoxDecoration(
+        color: ColorManager.white,
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 30.r,
+            spreadRadius: 0,
+            color: ColorManager.lightGrey.withOpacity(0.2),
+            offset: const Offset(0, -20),
+          )
+        ],
+      ),
+      alignment: Alignment.center,
+      padding: EdgeInsetsDirectional.symmetric(horizontal: 30.r),
+      child: SizedBox(
+        height: 57.r,
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    StringManager.price,
+                    style: themeData.textTheme.bodySmall!.copyWith(
+                        height: 22 / 12, color: ColorManager.primaryLight300),
+                  ),
+                  Text(
+                    Globals.currencyFormat.format(235),
+                    style: themeData.textTheme.headlineMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      height: 30 / 20,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            AppButtonWidget(
+              text: StringManager.addToCart,
+              shrinkToFitChildSize: true,
+              padding: EdgeInsetsDirectional.symmetric(horizontal: 31.5.r),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -131,6 +186,19 @@ class ProductDetailsPage extends StatelessWidget {
               fontSize: 16, fontWeight: FontWeight.w600, height: 26 / 16),
         ),
         SizedBox(height: 10.r),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [1, 2, 3].map((v) {
+            return const ProductReviewWidget();
+          }).toList(),
+        ),
+        AppButtonWidget(
+          text: StringManager.seeAllReview,
+          backgroundColor: ColorManager.transparent,
+          borderColor: ColorManager.primaryLight200,
+          textColor: ColorManager.primaryDefault500,
+          onTap: () {},
+        ),
       ],
     );
   }
