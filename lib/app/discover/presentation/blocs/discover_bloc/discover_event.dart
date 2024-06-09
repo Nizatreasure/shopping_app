@@ -12,7 +12,12 @@ class DiscoverGetProductListEvent extends DiscoverEvent {
   const DiscoverGetProductListEvent();
 }
 
-class DiscoverGetProductDetailsEvent extends DiscoverEvent {
-  final String documentID;
-  const DiscoverGetProductDetailsEvent(this.documentID);
+class DiscoverTabIndexChangedEvent extends DiscoverEvent {
+  final int index;
+  const DiscoverTabIndexChangedEvent(this.index);
+}
+
+class DiscoverGetProductsByBrandEvent extends DiscoverEvent {
+  final int brandIndex;
+  const DiscoverGetProductsByBrandEvent(this.brandIndex);
 }

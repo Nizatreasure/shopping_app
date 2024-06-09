@@ -23,12 +23,11 @@ class DiscoverApiService {
   }
 
   //default order in the app is to sort by highest price
-  //the limit was set to 20 products for each request
+  //no limit was set (no pagination) because the products in the
+  //database is very small
   Future<QuerySnapshot<ProductModel>> getProductList(String name) async {
     return _productReference
-        .orderBy('price.amount', descending: true)
-        .startAfter([name])
-        .limit(20)
+        .where('brand', isEqualTo: name.isEmpty ? null : name)
         .withConverter<ProductModel>(
             fromFirestore: (snapshot, _) => ProductModel.fromJson(snapshot),
             toFirestore: (model, _) => model.toJson())

@@ -42,6 +42,5 @@ Future<void> initializeDependencies() async {
       GetProductDetailUsecase(getIt()));
 
   //blocs
-  getIt.registerFactory<DiscoverBloc>(
-      () => DiscoverBloc(getIt(), getIt(), getIt()));
+  getIt.registerFactory<DiscoverBloc>(() => DiscoverBloc(getIt(), getIt()));
 }

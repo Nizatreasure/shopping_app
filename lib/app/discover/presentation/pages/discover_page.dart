@@ -59,7 +59,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget _buildBody(
       ThemeData themeData, double bottomPadding, DiscoverState state) {
     DataState brandState = state.brandStatus.state;
-    DataState productState = state.productStatus.state;
+    DataState productState = state.tabIndex > 0
+        ? state.productTabs[state.tabIndex - 1].status.state
+        : state.productStatus.state;
     bool loadingBrands =
         brandState == DataState.loading || brandState == DataState.initial;
     bool loadingProducts = productState == DataState.loading ||
@@ -80,8 +82,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
               Expanded(
                 child: IgnorePointer(
                   ignoring: loadingProducts,
-                  child:
-                      _buildProductList(bottomPadding, loadingProducts, state),
+                  child: _buildProductList(
+                      bottomPadding, loadingProducts, state, productState),
                 ),
               )
             ],
@@ -95,11 +97,17 @@ class _DiscoverPageState extends State<DiscoverPage> {
     );
   }
 
-  Widget _buildProductList(
-      double bottomPadding, bool loadingProducts, DiscoverState state) {
-    return state.brandStatus.state == DataState.failure
+  Widget _buildProductList(double bottomPadding, bool loadingProducts,
+      DiscoverState state, DataState productState) {
+    print('loading produt $loadingProducts');
+    int brandIndex = state.tabIndex - 1;
+    return productState == DataState.failure
         ? Container()
-        : (state.products?.isEmpty ?? false)
+        : ((state.tabIndex > 0
+                        ? state.productTabs[brandIndex].product
+                        : state.products)
+                    ?.isEmpty ??
+                false)
             ? const Align(
                 alignment: Alignment(0, -0.2),
                 child: Text(
@@ -119,12 +127,20 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 itemBuilder: (context, index) {
                   return ShimmerWidget(
                     loading: loadingProducts,
-                    child: state.products == null
+                    child: (state.tabIndex > 0
+                                ? state.productTabs[brandIndex].product
+                                : state.products) ==
+                            null
                         ? const SizedBox()
-                        : ItemPreviewWidget(
-                            item:
-                                state.products![index % state.products!.length],
-                          ),
+                        : Builder(builder: (context) {
+                            List<ProductModel> products = state.tabIndex > 0
+                                ? state.productTabs[brandIndex].product!
+                                : state.products!;
+
+                            return ItemPreviewWidget(
+                              item: products[index % products.length],
+                            );
+                          }),
                   );
                 },
               );
@@ -143,6 +159,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
             borderRadius: 10,
             loading: loading,
             child: TabBar(
+              onTap: (value) {
+                context
+                    .read<DiscoverBloc>()
+                    .add(DiscoverTabIndexChangedEvent(value));
+              },
               indicatorColor: ColorManager.transparent,
               dividerColor: ColorManager.transparent,
               labelStyle: themeData.textTheme.headlineMedium!
