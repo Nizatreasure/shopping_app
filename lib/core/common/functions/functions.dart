@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 String formatDate(DateTime date) {
@@ -14,4 +15,15 @@ String formatDate(DateTime date) {
   } else {
     return DateFormat('MMMM d, yyyy').format(date);
   }
+}
+
+Color convertHexToColor(String hex) {
+  String hexVal = hex;
+  if (hexVal.startsWith('#')) {
+    hexVal = hexVal.substring(1);
+  }
+  if (hexVal.length != 6) {
+    return Colors.transparent;
+  }
+  return Color(int.parse('0xff$hexVal'));
 }

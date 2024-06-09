@@ -1,1 +1,43 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"shopping-app-38f32","appId":"1:24083997488:android:f0c6c124630eb9ccd4def5","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"shopping-app-38f32","appId":"1:24083997488:ios:773c1daf1a21ac60d4def5","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"shopping-app-38f32","configurations":{"android":"1:24083997488:android:f0c6c124630eb9ccd4def5","ios":"1:24083997488:ios:773c1daf1a21ac60d4def5"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "shopping-app-38f32",
+          "appId": "1:24083997488:android:f0c6c124630eb9ccd4def5",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "shopping-app-38f32",
+          "appId": "1:24083997488:ios:773c1daf1a21ac60d4def5",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "shopping-app-38f32",
+          "configurations": {
+            "android": "1:24083997488:android:f0c6c124630eb9ccd4def5",
+            "ios": "1:24083997488:ios:773c1daf1a21ac60d4def5"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "venv",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}
