@@ -126,7 +126,7 @@ class _CartItemWidgetState extends State<CartItemWidget>
       children: [
         Expanded(
           child: Text(
-            Globals.currencyFormat.format(235),
+            Globals.amountFormat.format(235),
             style: themeData.textTheme.titleMedium!.copyWith(
                 fontSize: 14, fontWeight: FontWeight.bold, height: 24 / 14),
           ),

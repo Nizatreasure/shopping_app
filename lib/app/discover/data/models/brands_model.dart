@@ -18,4 +18,7 @@ class BrandsModel {
       logo: json['logo'] ?? '',
     );
   }
+  BrandsModel copyWith({String? name, String? logo}) {
+    return BrandsModel(name: name ?? this.name, logo: logo ?? this.logo);
+  }
 }

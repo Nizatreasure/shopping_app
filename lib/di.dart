@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shopping_app/app/discover/data/data_sources/remote_data_sources.dart';
+import 'package:shopping_app/app/discover/presentation/blocs/discover_bloc/discover_bloc.dart';
 
 import 'app/discover/data/data_sources/remote/api_service.dart';
 import 'app/discover/data/repositories/discover_repository_impl.dart';
@@ -39,4 +40,8 @@ Future<void> initializeDependencies() async {
       .registerSingleton<GetProductListUsecase>(GetProductListUsecase(getIt()));
   getIt.registerSingleton<GetProductDetailUsecase>(
       GetProductDetailUsecase(getIt()));
+
+  //blocs
+  getIt.registerFactory<DiscoverBloc>(
+      () => DiscoverBloc(getIt(), getIt(), getIt()));
 }

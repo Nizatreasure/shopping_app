@@ -8,8 +8,7 @@ import 'firebase_options.dart';
 
 class Globals {
   static NumberFormat ratingFormat = NumberFormat('0.0');
-  static NumberFormat currencyFormat =
-      NumberFormat.simpleCurrency(name: 'USD', decimalDigits: 2);
+  static NumberFormat amountFormat = NumberFormat('0.00');
   static Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(

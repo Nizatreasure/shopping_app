@@ -1,9 +1,14 @@
 part of '../pages/discover_page.dart';
 
-class ItemPreviewWidget extends StatelessWidget {
-  final ItemPreviewModel item;
+class ItemPreviewWidget extends StatefulWidget {
+  final ProductModel item;
   const ItemPreviewWidget({super.key, required this.item});
 
+  @override
+  State<ItemPreviewWidget> createState() => _ItemPreviewWidgetState();
+}
+
+class _ItemPreviewWidgetState extends State<ItemPreviewWidget> {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
@@ -18,16 +23,26 @@ class ItemPreviewWidget extends StatelessWidget {
               child: Stack(
                 children: [
                   Container(
+                    height: double.infinity,
+                    clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.r),
                       color: ColorManager.primaryDefault500.withOpacity(0.05),
                     ),
-                  ),
-                  Positioned(
-                    left: 15.r,
-                    right: 15.r,
-                    bottom: 22.r,
-                    child: Image.asset(AppAssetManager.preview),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.r),
+                      child: CustomNetworkImage(
+                        imageUrl: widget.item.images.first.image,
+                        onRetry: () {
+                          setState(() {
+                            widget.item.copyWith(
+                              images: widget.item.images
+                                ..[0].copyWith(imageKey: UniqueKey()),
+                            );
+                          });
+                        },
+                      ),
+                    ),
                   ),
                   Positioned(
                     left: 15.r,
@@ -45,7 +60,7 @@ class ItemPreviewWidget extends StatelessWidget {
             ),
             SizedBox(height: 10.r),
             Text(
-              item.name,
+              widget.item.name,
               style: themeData.textTheme.bodySmall!.copyWith(
                   height: 22 / themeData.textTheme.bodySmall!.fontSize!),
               overflow: TextOverflow.ellipsis,
@@ -53,7 +68,7 @@ class ItemPreviewWidget extends StatelessWidget {
             SizedBox(height: 5.r),
             _buildRatingAndReview(themeData),
             Text(
-              Globals.currencyFormat.format(item.price),
+              '${widget.item.price.symbol}${Globals.amountFormat.format(widget.item.price.amount)}',
               style: themeData.textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
@@ -72,7 +87,7 @@ class ItemPreviewWidget extends StatelessWidget {
         SvgPicture.asset(AppAssetManager.starFilled, width: 12.r, height: 12.r),
         SizedBox(width: 5.r),
         Text(
-          Globals.ratingFormat.format(item.averageRating),
+          Globals.ratingFormat.format(widget.item.reviewInfo.averageRating),
           style: themeData.textTheme.bodySmall!.copyWith(
             fontSize: 11,
             fontWeight: FontWeight.bold,
@@ -80,7 +95,7 @@ class ItemPreviewWidget extends StatelessWidget {
         ),
         SizedBox(width: 5.r),
         Text(
-          '(${item.totalReviews} ${StringManager.reviews})',
+          '(${widget.item.reviewInfo.totalReviews} ${StringManager.reviews})',
           style: themeData.textTheme.bodySmall!.copyWith(
             fontSize: 11,
             fontWeight: FontWeight.normal,

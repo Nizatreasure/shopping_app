@@ -4,10 +4,12 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shopping_app/app/discover/data/data_sources/remote/api_service.dart';
 import 'package:shopping_app/app/discover/data/models/brands_model.dart';
 import 'package:shopping_app/app/discover/data/repositories/discover_repository_impl.dart';
+import 'package:shopping_app/blocs.dart';
 import 'package:shopping_app/core/constants/constants.dart';
 import 'package:shopping_app/di.dart';
 import 'package:shopping_app/globals.dart';
@@ -63,7 +65,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    getData();
+    // getData();
     super.initState();
   }
 
@@ -134,20 +136,23 @@ class _MyAppState extends State<MyApp> {
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
           },
-          child: MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            title: AppConstants.appTitle,
-            routeInformationParser: MyAppRouter.router.routeInformationParser,
-            routerDelegate: MyAppRouter.router.routerDelegate,
-            routeInformationProvider:
-                MyAppRouter.router.routeInformationProvider,
-            theme: ThemeManager.getLightTheme(),
-            builder: (context, child) {
-              return ScrollConfiguration(
-                behavior: const ScrollBehavior().copyWith(overscroll: false),
-                child: child!,
-              );
-            },
+          child: MultiBlocProvider(
+            providers: AppBlocs.blocs,
+            child: MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              title: AppConstants.appTitle,
+              routeInformationParser: MyAppRouter.router.routeInformationParser,
+              routerDelegate: MyAppRouter.router.routerDelegate,
+              routeInformationProvider:
+                  MyAppRouter.router.routeInformationProvider,
+              theme: ThemeManager.getLightTheme(),
+              builder: (context, child) {
+                return ScrollConfiguration(
+                  behavior: const ScrollBehavior().copyWith(overscroll: false),
+                  child: child!,
+                );
+              },
+            ),
           ),
         );
       },

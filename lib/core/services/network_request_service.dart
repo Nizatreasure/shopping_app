@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 
-import '../common/network/data_failure.dart';
+import '../common/network/data_failure_model.dart';
 import 'connection_checker.dart';
 
 class NetworkRequestService {

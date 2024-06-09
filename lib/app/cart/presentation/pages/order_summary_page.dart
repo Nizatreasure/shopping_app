@@ -78,13 +78,13 @@ class OrderSummaryPage extends StatelessWidget {
                   _paymentDetailsWidget(
                     themeData,
                     leading: StringManager.subTotal,
-                    trailing: Globals.currencyFormat.format(300),
+                    trailing: Globals.amountFormat.format(300),
                   ),
                   SizedBox(height: 20.r),
                   _paymentDetailsWidget(
                     themeData,
                     leading: StringManager.shipping,
-                    trailing: Globals.currencyFormat.format(30),
+                    trailing: Globals.amountFormat.format(30),
                   ),
                   Divider(
                     color: ColorManager.primaryLight100,
@@ -95,7 +95,7 @@ class OrderSummaryPage extends StatelessWidget {
                     themeData,
                     useBoldFont: true,
                     leading: StringManager.totalOrder,
-                    trailing: Globals.currencyFormat.format(330),
+                    trailing: Globals.amountFormat.format(330),
                   ),
                 ],
               ),
@@ -169,7 +169,7 @@ class OrderSummaryPage extends StatelessWidget {
                         height: 22 / 12, color: ColorManager.primaryLight300),
                   ),
                   Text(
-                    Globals.currencyFormat.format(235),
+                    Globals.amountFormat.format(235),
                     style: themeData.textTheme.headlineMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,

@@ -38,7 +38,7 @@ class OrderDetailItem extends StatelessWidget {
                 ),
               ),
               Text(
-                Globals.currencyFormat.format(235),
+                Globals.amountFormat.format(235),
                 style: themeData.textTheme.titleMedium!.copyWith(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,

@@ -80,7 +80,7 @@ class CartPage extends StatelessWidget {
                         height: 22 / 12, color: ColorManager.primaryLight300),
                   ),
                   Text(
-                    Globals.currencyFormat.format(235),
+                    Globals.amountFormat.format(235),
                     style: themeData.textTheme.headlineMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
