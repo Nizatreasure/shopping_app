@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:shopping_app/app/discover/data/data_sources/remote_data_sources.dart';
+import 'package:shopping_app/app/discover/data/models/filter_model.dart';
 import 'package:shopping_app/core/common/network/data_failure_model.dart';
 import 'package:shopping_app/core/services/network_request_service.dart';
 
@@ -35,6 +36,14 @@ class DiscoverRepositoryImpl implements DiscoverRepository {
       String docID) {
     return _networkRequestService.makeRequest(request: () {
       return _discoverRemoteDataSource.getProductDetails(docID);
+    });
+  }
+
+  @override
+  Future<Either<DataFailure, QuerySnapshot<ProductModel>>>
+      getFilteredProductList(FilterModel filter) {
+    return _networkRequestService.makeRequest(request: () {
+      return _discoverRemoteDataSource.getFilteredProductList(filter);
     });
   }
 }

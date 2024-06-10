@@ -8,4 +8,7 @@ abstract class DiscoverRepository {
 
   Future<Either<DataFailure, DocumentSnapshot<ProductModel>>> getProductDetails(
       String docID);
+
+  Future<Either<DataFailure, QuerySnapshot<ProductModel>>>
+      getFilteredProductList(FilterModel filter);
 }

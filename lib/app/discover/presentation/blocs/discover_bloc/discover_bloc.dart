@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:shopping_app/app/discover/data/models/brands_model.dart';
+import 'package:shopping_app/app/discover/data/models/filter_model.dart';
 import 'package:shopping_app/app/discover/data/models/product_model.dart';
 import 'package:shopping_app/app/discover/data/models/product_tab_model.dart';
 import 'package:shopping_app/app/discover/domain/usecases/usecases.dart';
@@ -14,23 +15,36 @@ part 'discover_state.dart';
 class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
   final GetBrandsUsecase _getBrandsUsecase;
   final GetProductListUsecase _getProductListUsecase;
+  final GetFilteredProductUsecase _getFilteredProductUsecase;
 
-  DiscoverBloc(this._getBrandsUsecase, this._getProductListUsecase)
+  final ScrollController _allProductsScrollController = ScrollController();
+  ScrollController get allProductsScrollController =>
+      _allProductsScrollController;
+
+  DiscoverBloc(this._getBrandsUsecase, this._getProductListUsecase,
+      this._getFilteredProductUsecase)
       : super(const DiscoverState()) {
     on<DiscoverGetBrandsEvent>(_getBrandsEventHandler);
     on<DiscoverGetProductListEvent>(_getProductListEventHandler);
     on<DiscoverTabIndexChangedEvent>(_tabIndexChangedEventHandler);
+    on<DiscoverSetFilterEvent>(_setFilterEventHandler);
+    on<DiscoverClearFilterEvent>(_clearFiltersEventHandler);
+    on<DiscoverApplyFilterEvent>(_applyFiltersEventHandler);
   }
 
   _getBrandsEventHandler(
       DiscoverGetBrandsEvent event, Emitter<DiscoverState> emit) async {
-    emit(state.copyWith(brandStatus: DataStatus.loading()));
+    emit(state.copyWith(
+        brandStatus: DataStatus.loading(),
+        productTabs: List.from(state.productTabs)
+          ..[0] = ProductTabModel(status: DataStatus.loading())));
     final dataSate = await _getBrandsUsecase.execute(params: null);
 
     if (dataSate.isRight) {
       emit(
         state.copyWith(
           brandStatus: DataStatus.success(),
+          //add the new brands to the already existing tab (all tab)
           brands: List.from(state.brands)
             ..addAll(dataSate.right.docs.map((brand) => brand.data()).toList()),
           //populate the tab data
@@ -45,7 +59,10 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
       add(const DiscoverGetProductListEvent(0));
     } else {
       emit(state.copyWith(
-          brandStatus: DataStatus.failure(exception: dataSate.left)));
+          brandStatus: DataStatus.failure(exception: dataSate.left),
+          productTabs: List.from(state.productTabs)
+            ..[0] = ProductTabModel(
+                status: DataStatus.failure(exception: dataSate.left))));
     }
   }
 
@@ -71,7 +88,6 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
         params: index == 0 ? '' : state.brands[index].name);
 
     if (dataSate.isRight) {
-      //  List<ProductModel> = ;
       //get the brand information for the product
 
       //if request was successful, update the state to reflect the new data
@@ -101,6 +117,61 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
       DiscoverTabIndexChangedEvent event, Emitter<DiscoverState> emit) {
     emit(state.copyWith(tabIndex: event.index));
     add(DiscoverGetProductListEvent(event.index));
+  }
+
+  _setFilterEventHandler(
+      DiscoverSetFilterEvent event, Emitter<DiscoverState> emit) {
+    FilterModel filters = const FilterModel().copyWith(
+      brand: event.filters.brand,
+      setBrandToNull: event.filters.brand == null,
+      color: event.filters.color,
+      setColorToNull: event.filters.color == null,
+      gender: event.filters.gender,
+      setGenderToNull: event.filters.gender == null,
+      priceRange: event.filters.priceRange,
+      setPriceRangeToNull: event.filters.priceRange == null,
+      sortBy: event.filters.sortBy,
+      setSortByToNull: event.filters.sortBy == null,
+    );
+    emit(state.copyWith(filters: filters));
+  }
+
+  _clearFiltersEventHandler(
+      DiscoverClearFilterEvent event, Emitter<DiscoverState> emit) {
+    if (allProductsScrollController.hasClients) {
+      allProductsScrollController.jumpTo(0);
+    }
+    emit(state.copyWith(
+        filters: const FilterModel(),
+        filteredProductsStatus: DataStatus.initial(),
+        setFilteredProductsToNull: true));
+  }
+
+  _applyFiltersEventHandler(
+      DiscoverApplyFilterEvent event, Emitter<DiscoverState> emit) async {
+    if (allProductsScrollController.hasClients) {
+      allProductsScrollController.jumpTo(0);
+    }
+    emit(state.copyWith(
+        filteredProductsStatus: DataStatus.loading(),
+        setFilteredProductsToNull: true));
+    final dataSate =
+        await _getFilteredProductUsecase.execute(params: state.filters);
+
+    if (dataSate.isRight) {
+      emit(
+        state.copyWith(
+            filteredProductsStatus: DataStatus.success(),
+            filteredProducts: dataSate.right.docs
+                .map((product) => product.data().copyWith(
+                    brand: _getProductBrandFromBrandList(product.data().brand)))
+                .toList()),
+      );
+    } else {
+      emit(state.copyWith(
+          filteredProductsStatus:
+              DataStatus.failure(exception: dataSate.left)));
+    }
   }
 
   BrandsModel _getProductBrandFromBrandList(BrandsModel brand) {

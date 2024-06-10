@@ -24,6 +24,7 @@ class NetworkRequestService {
           return Left(DataFailure());
         }
       } catch (e) {
+        print('object $e');
         return Left(DataFailure());
       }
     } else {

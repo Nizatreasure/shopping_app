@@ -17,55 +17,74 @@ class PriceRangeFilterWidget extends StatelessWidget {
                 fontWeight: FontWeight.w600, fontSize: 16, height: 26 / 16),
           ),
           SizedBox(height: 20.r),
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              FlutterSlider(
-                rangeSlider: true,
-                values: [0, 1500],
-                max: 1500,
-                min: 0,
-                tooltip: FlutterSliderTooltip(
-                  alwaysShowTooltip: true,
-                  custom: (value) => Text(
-                    '\$${(value as num).toInt()}',
-                    style: themeData.textTheme.titleMedium!
-                        .copyWith(fontWeight: FontWeight.bold, height: 22 / 12),
-                  ),
-                  positionOffset: FlutterSliderTooltipPositionOffset(top: 40.r),
-                ),
-                handlerHeight: 24.r,
-                handlerWidth: 24.r,
-                handler: _sliderHandler,
-                rightHandler: _sliderHandler,
-                trackBar: _sliderTrackBar,
-              ),
-              Positioned(
-                top: -10.r,
-                left: 0,
-                right: 0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          BlocBuilder<DiscoverBloc, DiscoverState>(
+              buildWhen: (previous, current) =>
+                  previous.filters != current.filters,
+              builder: (context, state) {
+                return Stack(
+                  clipBehavior: Clip.none,
                   children: [
-                    Text(
-                      '\$0',
-                      style: themeData.textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                          height: 22 / 12,
-                          color: ColorManager.grey),
+                    FlutterSlider(
+                      rangeSlider: true,
+                      minimumDistance: 50,
+                      values: [
+                        (state.filters.priceRange?.minPrice ?? 0),
+                        (state.filters.priceRange?.maxPrice ??
+                            AppConstants.maxPrice)
+                      ],
+                      max: AppConstants.maxPrice,
+                      min: 0,
+                      tooltip: FlutterSliderTooltip(
+                        alwaysShowTooltip: true,
+                        custom: (value) => Text(
+                          '\$${(value as num).toInt()}',
+                          style: themeData.textTheme.titleMedium!.copyWith(
+                              fontWeight: FontWeight.bold, height: 22 / 12),
+                        ),
+                        positionOffset:
+                            FlutterSliderTooltipPositionOffset(top: 40.r),
+                      ),
+                      handlerHeight: 24.r,
+                      handlerWidth: 24.r,
+                      handler: _sliderHandler,
+                      rightHandler: _sliderHandler,
+                      trackBar: _sliderTrackBar,
+                      onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                        context
+                            .read<DiscoverBloc>()
+                            .add(DiscoverSetFilterEvent(state.filters.copyWith(
+                              priceRange: PriceRangeModel(
+                                  maxPrice: upperValue, minPrice: lowerValue),
+                            )));
+                      },
                     ),
-                    Text(
-                      '\$1500',
-                      style: themeData.textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                          height: 22 / 12,
-                          color: ColorManager.grey),
-                    ),
+                    Positioned(
+                      top: -10.r,
+                      left: 0,
+                      right: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '\$0',
+                            style: themeData.textTheme.titleMedium!.copyWith(
+                                fontWeight: FontWeight.bold,
+                                height: 22 / 12,
+                                color: ColorManager.grey),
+                          ),
+                          Text(
+                            '\$${AppConstants.maxPrice.toInt()}',
+                            style: themeData.textTheme.titleMedium!.copyWith(
+                                fontWeight: FontWeight.bold,
+                                height: 22 / 12,
+                                color: ColorManager.grey),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
-                ),
-              )
-            ],
-          )
+                );
+              })
         ],
       ),
     );

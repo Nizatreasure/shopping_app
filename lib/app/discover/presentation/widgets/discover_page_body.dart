@@ -4,6 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shopping_app/app/discover/data/models/product_model.dart';
 import 'package:shopping_app/app/discover/presentation/blocs/discover_bloc/discover_bloc.dart';
 import 'package:shopping_app/core/common/enums/enums.dart';
+import 'package:shopping_app/core/common/network/data_status.dart';
+import 'package:shopping_app/core/common/widgets/error_widget.dart';
+import 'package:shopping_app/core/common/widgets/no_product_widget.dart';
 
 import '../pages/discover_page.dart';
 import 'shimmer_widget.dart';
@@ -19,43 +22,55 @@ class DiscoverPageBody extends StatelessWidget {
     double bottomPadding = MediaQuery.of(context).viewPadding.bottom;
     return BlocBuilder<DiscoverBloc, DiscoverState>(
       builder: (context, state) {
-        DataState productState = filter
-            ? state.filteredProductsStatus.state
-            : state.productTabs[state.tabIndex].status.state;
+        DataStatus productStatus = filter
+            ? state.filteredProductsStatus
+            : state.productTabs[state.tabIndex].status;
+
         List<ProductModel>? products = filter
             ? state.filteredProducts
             : state.productTabs[state.tabIndex].product;
 
-        bool loadingProducts = productState == DataState.loading ||
-            productState == DataState.initial ||
+        bool loadingProducts = productStatus.state == DataState.loading ||
+            productStatus.state == DataState.initial ||
             loadingBrands;
 
         return IgnorePointer(
           ignoring: loadingProducts,
-          child: _buildProductList(
-              bottomPadding, loadingProducts, products, productState, state),
+          child: _buildProductList(context, bottomPadding, loadingProducts,
+              products, productStatus, state),
         );
       },
     );
   }
 
   Widget _buildProductList(
+      BuildContext context,
       double bottomPadding,
       bool loadingProducts,
       List<ProductModel>? products,
-      DataState productState,
+      DataStatus productStatus,
       DiscoverState state) {
-    return productState == DataState.failure
-        ? Container()
+    return productStatus.state == DataState.failure
+        ? AppErrorWidget(
+            errorMessage: productStatus.exception!.message,
+            onTap: () {
+              DiscoverBloc discoverBloc = context.read<DiscoverBloc>();
+              if (filter && state.tabIndex == 0) {
+                discoverBloc.add(const DiscoverApplyFilterEvent());
+              } else if (state.brandStatus.state == DataState.failure) {
+                discoverBloc.add(const DiscoverGetBrandsEvent());
+              } else {
+                discoverBloc.add(DiscoverGetProductListEvent(state.tabIndex));
+              }
+            })
         : (products?.isEmpty ?? false)
-            ? const Align(
-                alignment: Alignment(0, -0.2),
-                child: Text(
-                  'No products',
-                ),
-              )
+            ? const NoProductWidget()
             : GridView.builder(
                 key: PageStorageKey('products-${state.tabIndex}'),
+                itemCount: filter ? products?.length : null,
+                controller: state.tabIndex == 0
+                    ? context.read<DiscoverBloc>().allProductsScrollController
+                    : null,
                 padding: EdgeInsetsDirectional.fromSTEB(
                     30.r, 15.r, 30.r, 70.r + bottomPadding),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

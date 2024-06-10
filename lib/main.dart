@@ -8,9 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shopping_app/app/discover/data/data_sources/remote/api_service.dart';
 import 'package:shopping_app/app/discover/data/models/brands_model.dart';
+import 'package:shopping_app/app/discover/data/models/filter_model.dart';
 import 'package:shopping_app/app/discover/data/repositories/discover_repository_impl.dart';
 import 'package:shopping_app/blocs.dart';
+import 'package:shopping_app/core/common/enums/enums.dart';
 import 'package:shopping_app/core/constants/constants.dart';
+import 'package:shopping_app/core/values/string_manager.dart';
 import 'package:shopping_app/di.dart';
 import 'package:shopping_app/globals.dart';
 
@@ -144,25 +147,59 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  getData() async {
-    for (int i = 0; i < 18; i++) {
-      imageList.shuffle();
-      names.shuffle();
-      reviews.shuffle();
-      dateTimes.shuffle();
+  Future<void> fetchAndUpdateDocuments() async {
+    final CollectionReference<Map<String, dynamic>> colorsCollection =
+        FirebaseFirestore.instance.collection('products');
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await colorsCollection.get();
 
-      Map<String, dynamic> json = {
-        "name": names[Random().nextInt(names.length)],
-        "image": imageList[Random().nextInt(imageList.length)],
-        "review": reviews[Random().nextInt(reviews.length)],
-        "created_at":
-            Timestamp.fromDate(dateTimes[Random().nextInt(dateTimes.length)]),
-        "rating": Random().nextInt(4) + 2,
-        "product_id": i + 1,
-      };
-      await getIt<DiscoverApiService>().createProduct(json);
-      await Future.delayed(const Duration(seconds: 2));
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document
+          in snapshot.docs) {
+        Map<String, dynamic> data = document.data();
+        // Replace the 'colors' list with a map
+        Map<String, dynamic> colorsMap = {
+          for (int i = 0; i < data['colors'].length; i++)
+            'color$i': data['colors'][i],
+        };
+        // Update the document with the modified data
+        await colorsCollection.doc(document.id).update({'colors': colorsMap});
+      }
+      print('Documents updated successfully');
+    } catch (e) {
+      print('Error fetching and updating documents: $e');
     }
+  }
+
+  getData() async {
+    final data = await getIt<DiscoverApiService>().getFilteredProductList(
+      FilterModel(
+        brand: BrandsModel(name: 'Puma', logo: ''),
+        gender: Gender.man,
+        sortBy: SortByModel(sortBy: SortBy.highestReviews, descending: true),
+        color: ColorModel(color: Colors.white, name: StringManager.white),
+        priceRange: PriceRangeModel(minPrice: 250),
+      ),
+    );
+
+    // for (int i = 0; i < 18; i++) {
+    //   imageList.shuffle();
+    //   names.shuffle();
+    //   reviews.shuffle();
+    //   dateTimes.shuffle();
+
+    //   Map<String, dynamic> json = {
+    //     "name": names[Random().nextInt(names.length)],
+    //     "image": imageList[Random().nextInt(imageList.length)],
+    //     "review": reviews[Random().nextInt(reviews.length)],
+    //     "created_at":
+    //         Timestamp.fromDate(dateTimes[Random().nextInt(dateTimes.length)]),
+    //     "rating": Random().nextInt(4) + 2,
+    //     "product_id": i + 1,
+    //   };
+    //   await getIt<DiscoverApiService>().createProduct(json);
+    //   await Future.delayed(const Duration(seconds: 2));
+    // }
 
     // Map<String, dynamic> json = {
     //   "gender": "Unisex",
@@ -208,10 +245,10 @@ class _MyAppState extends State<MyApp> {
     //   //     // .startAfter([''])
     //   //     // .limit(2)
     //   //     .get();
-
-    //   // for (DocumentSnapshot<ProductModel> item in fd.docs) {
-    //   //   print('name is this ${item.data()?.id}');
-    //   // }
+    print('length is ${data.docs.length}');
+    for (DocumentSnapshot<ProductModel> item in data.docs) {
+      print('name is this ${item.data()?.colors.first.toJson()}');
+    }
     // } catch (e) {
     //   print(e);
     // }

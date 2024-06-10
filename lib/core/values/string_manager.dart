@@ -48,5 +48,9 @@ class StringManager {
   static const String payment = 'Payment';
   static const String qty = 'Qty';
   static const String cart = 'Cart';
+  static const String green = 'Green';
+  static const String brown = 'Brown';
+  static const String retry = 'Retry';
+  static const String noProduct = 'No product';
   // static const String _!dfdsf = '';
 }

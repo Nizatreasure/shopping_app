@@ -69,13 +69,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                     children: [
                       _buildTabBar(loadingBrands, themeData, tabLength, state),
                       Expanded(
-                        child: TabBarView(
-                          children: List.generate(tabLength, (index) {
-                            if (index == 0) {}
-                            return DiscoverPageBody(
-                                loadingBrands: loadingBrands);
-                          }),
-                        ),
+                        child: _buildBody(tabLength, loadingBrands),
                       )
                     ],
                   ),
@@ -87,6 +81,24 @@ class _DiscoverPageState extends State<DiscoverPage> {
               ),
             );
           }),
+    );
+  }
+
+  Widget _buildBody(int tabLength, bool loadingBrands) {
+    return TabBarView(
+      children: List.generate(tabLength, (index) {
+        if (index == 0) {
+          return BlocBuilder<DiscoverBloc, DiscoverState>(
+              buildWhen: (previous, current) =>
+                  previous.filters.isFiltering != current.filters.isFiltering,
+              builder: (context, state) {
+                return DiscoverPageBody(
+                    filter: state.filters.isFiltering,
+                    loadingBrands: loadingBrands);
+              });
+        }
+        return DiscoverPageBody(loadingBrands: loadingBrands);
+      }),
     );
   }
 
@@ -127,36 +139,47 @@ class _DiscoverPageState extends State<DiscoverPage> {
   }
 
   Widget _buildFilterButton(ThemeData themeData) {
-    return AppButtonWidget(
-      height: 40.r,
-      shrinkToFitChildSize: true,
-      padding: EdgeInsetsDirectional.symmetric(horizontal: 20.r),
-      onTap: () => context.pushNamed(RouteNames.productFilter),
-      child: Row(
-        children: [
-          Stack(
-            children: [
-              SvgPicture.asset(AppAssetManager.filter),
-              PositionedDirectional(
-                end: 0,
-                child: CircleAvatar(
-                  radius: 4.r,
-                  backgroundColor: ColorManager.errorDefault500,
-                ),
-              )
-            ],
-          ),
-          SizedBox(width: 16.r),
-          Text(
-            StringManager.filter.toUpperCase(),
-            style: themeData.textTheme.titleMedium!.copyWith(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: ColorManager.white,
-            ),
-          )
-        ],
-      ),
-    );
+    return BlocBuilder<DiscoverBloc, DiscoverState>(
+        buildWhen: (previous, current) =>
+            previous.productTabs[0].status != current.productTabs[0].status ||
+            previous.tabIndex != current.tabIndex ||
+            previous.filters != current.filters,
+        builder: (context, state) {
+          return state.tabIndex == 0 &&
+                  state.productTabs[0].status.state == DataState.success
+              ? AppButtonWidget(
+                  height: 40.r,
+                  shrinkToFitChildSize: true,
+                  padding: EdgeInsetsDirectional.symmetric(horizontal: 20.r),
+                  onTap: () => context.pushNamed(RouteNames.productFilter),
+                  child: Row(
+                    children: [
+                      Stack(
+                        children: [
+                          SvgPicture.asset(AppAssetManager.filter),
+                          if (state.filters.isFiltering)
+                            PositionedDirectional(
+                              end: 0,
+                              child: CircleAvatar(
+                                radius: 4.r,
+                                backgroundColor: ColorManager.errorDefault500,
+                              ),
+                            )
+                        ],
+                      ),
+                      SizedBox(width: 16.r),
+                      Text(
+                        StringManager.filter.toUpperCase(),
+                        style: themeData.textTheme.titleMedium!.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: ColorManager.white,
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              : const SizedBox();
+        });
   }
 }

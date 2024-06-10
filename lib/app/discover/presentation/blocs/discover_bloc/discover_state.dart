@@ -8,6 +8,7 @@ class DiscoverState {
   final DataStatus filteredProductsStatus;
   final DataStatus brandStatus;
   final int tabIndex;
+  final FilterModel filters;
 
   //initialize the state with the default values
   //including the values ‘all‘ product tab
@@ -20,6 +21,7 @@ class DiscoverState {
     ],
     this.brandStatus = const DataStatus(state: DataState.initial),
     this.filteredProductsStatus = const DataStatus(state: DataState.initial),
+    this.filters = const FilterModel(),
   });
 
   DiscoverState copyWith({
@@ -29,15 +31,20 @@ class DiscoverState {
     DataStatus? brandStatus,
     List<ProductTabModel>? productTabs,
     int? tabIndex,
+    FilterModel? filters,
+    bool setFilteredProductsToNull = false,
   }) {
     return DiscoverState(
       brands: brands ?? this.brands,
-      filteredProducts: filteredProducts ?? this.filteredProducts,
+      filteredProducts: setFilteredProductsToNull
+          ? null
+          : filteredProducts ?? this.filteredProducts,
       brandStatus: brandStatus ?? this.brandStatus,
       filteredProductsStatus:
           filteredProductsStatus ?? this.filteredProductsStatus,
       productTabs: productTabs ?? this.productTabs,
       tabIndex: tabIndex ?? this.tabIndex,
+      filters: filters ?? this.filters,
     );
   }
 }

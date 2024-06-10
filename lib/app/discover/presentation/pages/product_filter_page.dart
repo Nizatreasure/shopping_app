@@ -4,10 +4,16 @@ import 'package:another_xlider/models/tooltip/tooltip.dart';
 import 'package:another_xlider/models/tooltip/tooltip_position_offset.dart';
 import 'package:another_xlider/models/trackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shopping_app/app/discover/data/models/brands_model.dart';
+import 'package:shopping_app/app/discover/data/models/filter_model.dart';
+import 'package:shopping_app/app/discover/presentation/blocs/discover_bloc/discover_bloc.dart';
 import 'package:shopping_app/core/common/widgets/app_button_widget.dart';
 import 'package:shopping_app/core/common/widgets/appbar_widget.dart';
+import 'package:shopping_app/core/constants/constants.dart';
 import 'package:shopping_app/core/values/asset_manager.dart';
 import 'package:shopping_app/core/values/color_manager.dart';
 import 'package:shopping_app/core/values/string_manager.dart';
@@ -44,18 +50,19 @@ class ProductFilterPage extends StatelessWidget {
                   SizedBox(height: 30.r),
                   const GenderFilter(),
                   SizedBox(height: 30.r),
-                  const ColorFilter(),
+                  const AppColorFilter(),
                 ],
               ),
             ),
           ),
-          _buildBottomPageWidget(themeData, bottomPadding),
+          _buildBottomPageWidget(context, themeData, bottomPadding),
         ],
       ),
     );
   }
 
-  Widget _buildBottomPageWidget(ThemeData themeData, double bottomPadding) {
+  Widget _buildBottomPageWidget(
+      BuildContext context, ThemeData themeData, double bottomPadding) {
     return Container(
       height: 90.r + bottomPadding,
       decoration: BoxDecoration(
@@ -75,19 +82,35 @@ class ProductFilterPage extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: AppButtonWidget(
-              text: '${StringManager.reset.toUpperCase()} (4)',
-              borderColor: ColorManager.primaryLight200,
-              backgroundColor: ColorManager.transparent,
-              textColor: ColorManager.primaryDefault500,
-              onTap: () {},
-            ),
+            child: BlocBuilder<DiscoverBloc, DiscoverState>(
+                buildWhen: (previous, current) =>
+                    previous.filters != current.filters,
+                builder: (context, state) {
+                  int filterCount = state.filters.activeFiltersCount;
+                  return AppButtonWidget(
+                    text:
+                        '${StringManager.reset.toUpperCase()}${filterCount > 0 ? ' ($filterCount)' : ''}',
+                    borderColor: ColorManager.primaryLight200,
+                    backgroundColor: ColorManager.transparent,
+                    textColor: ColorManager.primaryDefault500,
+                    onTap: () {
+                      context
+                          .read<DiscoverBloc>()
+                          .add(const DiscoverClearFilterEvent());
+                    },
+                  );
+                }),
           ),
           SizedBox(width: 15.r),
           Expanded(
             child: AppButtonWidget(
               text: StringManager.apply.toUpperCase(),
-              onTap: () {},
+              onTap: () {
+                context
+                    .read<DiscoverBloc>()
+                    .add(const DiscoverApplyFilterEvent());
+                context.pop();
+              },
             ),
           ),
         ],

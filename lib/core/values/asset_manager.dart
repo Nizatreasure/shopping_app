@@ -26,6 +26,8 @@ class AppAssetManager {
   static const String tickCircle = '$_svgPath/tick-circle.svg';
   static const String minusCircle = '$_svgPath/minus-circle.svg';
   static const String addCircle = '$_svgPath/add-circle.svg';
+  static const String error = '$_svgPath/error.svg';
+  static const String noProduct = '$_svgPath/no-product.svg';
 
   //lottie
   static const String successLottie = '$_lottiePath/success.json';

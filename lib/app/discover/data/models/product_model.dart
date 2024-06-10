@@ -199,7 +199,7 @@ class ColorModel {
   final Color color;
   final String name;
 
-  ColorModel({
+  const ColorModel({
     required this.color,
     required this.name,
   });
@@ -213,7 +213,7 @@ class ColorModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'hex': '#${color.value.toRadixString(16).substring(2)}',
+      'hex': '#${color.value.toRadixString(16).substring(2)}'.toUpperCase(),
       'name': name,
     };
   }

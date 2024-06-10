@@ -40,7 +40,10 @@ Future<void> initializeDependencies() async {
       .registerSingleton<GetProductListUsecase>(GetProductListUsecase(getIt()));
   getIt.registerSingleton<GetProductDetailUsecase>(
       GetProductDetailUsecase(getIt()));
+  getIt.registerSingleton<GetFilteredProductUsecase>(
+      GetFilteredProductUsecase(getIt()));
 
   //blocs
-  getIt.registerFactory<DiscoverBloc>(() => DiscoverBloc(getIt(), getIt()));
+  getIt.registerFactory<DiscoverBloc>(
+      () => DiscoverBloc(getIt(), getIt(), getIt()));
 }
