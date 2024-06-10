@@ -6,7 +6,7 @@ class ProductTabModel {
   final List<ProductModel>? product;
   final DataStatus status;
 
-  ProductTabModel({
+  const ProductTabModel({
     this.product,
     this.status = const DataStatus(state: DataState.initial),
   });

@@ -49,8 +49,8 @@ class _ItemPreviewWidgetState extends State<ItemPreviewWidget> {
                     top: 15.r,
                     width: 24.r,
                     height: 24.r,
-                    child: SvgPicture.asset(
-                      AppAssetManager.adidas,
+                    child: SvgPicture.network(
+                      widget.item.brand.logo,
                       colorFilter: const ColorFilter.mode(
                           ColorManager.primaryLight300, BlendMode.srcIn),
                     ),

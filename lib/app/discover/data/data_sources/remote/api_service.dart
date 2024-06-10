@@ -34,10 +34,10 @@ class DiscoverApiService {
         .get();
   }
 
-  // createProduct(Map<String, dynamic> data) async {
-  //   DocumentReference docID = await _productReference.add(data);
-  //   print(docID.id);
-  // }
+  createProduct(Map<String, dynamic> data) async {
+    DocumentReference docID = await _firestore.collection('reviews').add(data);
+    print(docID.id);
+  }
 
   //get product details for a single product with the
   //document id

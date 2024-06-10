@@ -9,15 +9,11 @@ class DiscoverGetBrandsEvent extends DiscoverEvent {
 }
 
 class DiscoverGetProductListEvent extends DiscoverEvent {
-  const DiscoverGetProductListEvent();
+  final int index;
+  const DiscoverGetProductListEvent(this.index);
 }
 
 class DiscoverTabIndexChangedEvent extends DiscoverEvent {
   final int index;
   const DiscoverTabIndexChangedEvent(this.index);
-}
-
-class DiscoverGetProductsByBrandEvent extends DiscoverEvent {
-  final int brandIndex;
-  const DiscoverGetProductsByBrandEvent(this.brandIndex);
 }

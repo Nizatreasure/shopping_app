@@ -37,41 +37,133 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<num> numList = [
-    39,
-    39.5,
-    40,
-    40.5,
-    41,
-    41.5,
-    42,
-    42.5,
-    43,
-    43.5,
-    44,
-    44.5,
-    45,
-    46,
-    47
+  List<String> imageList = [
+    "https://firebasestorage.googleapis.com/v0/b/shopping-app-38f32.appspot.com/o/images%2Fpicture.jpeg?alt=media&token=852b25a2-2422-4c7b-82ce-a53091c53ad1",
+    "https://firebasestorage.googleapis.com/v0/b/shopping-app-38f32.appspot.com/o/images%2Fpicture10.jpeg?alt=media&token=c8a6965f-6a7b-4dad-999d-ff922a6bcf30",
+    "https://firebasestorage.googleapis.com/v0/b/shopping-app-38f32.appspot.com/o/images%2Fpicture2.jpeg?alt=media&token=3071ab09-da0f-4c16-895a-8fe3af8f8108",
+    "https://firebasestorage.googleapis.com/v0/b/shopping-app-38f32.appspot.com/o/images%2Fpicture3.jpeg?alt=media&token=a0d9dd2a-305c-4313-b3fe-aaea056e45b3",
+    "https://firebasestorage.googleapis.com/v0/b/shopping-app-38f32.appspot.com/o/images%2Fpicture4.jpeg?alt=media&token=76e63042-e3d1-4144-ad5e-db885c8db686",
+    "https://firebasestorage.googleapis.com/v0/b/shopping-app-38f32.appspot.com/o/images%2Fpicture5.jpeg?alt=media&token=93137037-3981-4117-9135-b0341f8e9e40",
+    "https://firebasestorage.googleapis.com/v0/b/shopping-app-38f32.appspot.com/o/images%2Fpicture6.jpeg?alt=media&token=2af9fb7d-fa19-4c92-8ecc-e1e3dbf10b98",
+    "https://firebasestorage.googleapis.com/v0/b/shopping-app-38f32.appspot.com/o/images%2Fpicture7.jpeg?alt=media&token=c2c8fd93-db9b-4a56-bb01-d334ce9e0e25",
+    "https://firebasestorage.googleapis.com/v0/b/shopping-app-38f32.appspot.com/o/images%2Fpicture8.jpeg?alt=media&token=1382412f-50aa-4a11-ac93-06c211d56325",
+    "https://firebasestorage.googleapis.com/v0/b/shopping-app-38f32.appspot.com/o/images%2Fpicture9.jpeg?alt=media&token=94442cd1-51ad-4f67-9237-9229d76c00f6",
   ];
 
-  List<Map<String, dynamic>> colorList = [
-    {"hex": "#FFFFFF", "name": "White"},
-    {"hex": "#FF0000", "name": "Red"},
-    {"hex": "#00FF00", "name": "Green"},
-    {"hex": "#000000", "name": "Black"},
-    {"hex": "#A52A2A", "name": "Brown"},
+  List<String> names = [
+    "Liam Johnson",
+    "Emma Williams",
+    "Noah Brown",
+    "Olivia Jones",
+    "William Garcia",
+    "Ava Miller",
+    "James Davis",
+    "Sophia Martinez",
+    "Benjamin Rodriguez",
+    "Isabella Hernandez",
+    "Lucas Wilson",
+    "Mia Anderson",
+    "Mason Thomas",
+    "Charlotte Taylor",
+    "Ethan Moore",
+    "Amelia Martin",
+    "Alexander Jackson",
+    "Harper Lee",
+    "Michael White",
+    "Evelyn Harris",
+  ];
+
+  List<String> reviews = [
+    "Extremely comfortable and stylish!",
+    "Great fit and very durable.",
+    "Perfect for everyday wear.",
+    "Lightweight and breathable, ideal for summer.",
+    "The color is exactly as shown in the pictures.",
+    "Excellent support for long walks.",
+    "Very well made, worth every penny.",
+    "Fit perfectly and look great with jeans.",
+    "High quality material, very satisfied.",
+    "Sleek design and very comfortable.",
+    "Amazing shoes, exceeded my expectations.",
+    "Love the cushioning, feels like walking on air.",
+    "Perfect for running, great grip and support.",
+    "Stylish and comfortable, get lots of compliments.",
+    "The fit is just right, no need for breaking in.",
+    "Excellent arch support, very comfortable.",
+    "Great for casual wear and looks stylish.",
+    "Very comfortable for all-day wear.",
+    "Trendy and functional, highly recommend.",
+    "These shoes are incredibly light and comfy.",
+    "Supportive and stylish, perfect for work.",
+    "Perfect balance of comfort and style.",
+    "Well-cushioned and durable, great for jogging.",
+    "Fantastic quality, fits true to size.",
+    "Breathable material, keeps feet cool.",
+    "Comfortable right out of the box.",
+    "Sole provides excellent traction.",
+    "Stylish design, matches with multiple outfits.",
+    "Great value for the price.",
+    "Perfect for long standing hours.",
+    "These shoes have a premium feel.",
+    "Ideal for outdoor activities, very sturdy.",
+    "Fashionable and functional, love them!",
+    "The insoles are super soft and comfy.",
+    "Excellent for hiking, very supportive.",
+    "Nice balance of firmness and flexibility.",
+    "Perfect for both casual and formal occasions.",
+    "High-quality stitching, very durable.",
+    "Feels like a custom fit.",
+    "Keeps feet warm and dry in cold weather.",
+  ];
+
+  List<DateTime> dateTimes = [
+    DateTime(2024, 6, 8, 14, 37, 29),
+    DateTime(2024, 6, 9, 9, 12, 45),
+    DateTime(2024, 6, 10, 21, 3, 14),
+    DateTime(2024, 6, 11, 7, 48, 52),
+    DateTime(2024, 6, 12, 18, 26, 33),
+    DateTime(2024, 6, 8, 23, 10, 5),
+    DateTime(2024, 6, 9, 5, 15, 47),
+    DateTime(2024, 6, 10, 12, 50, 21),
+    DateTime(2024, 6, 11, 3, 33, 58),
+    DateTime(2024, 6, 12, 14, 22, 11),
+    DateTime(2024, 6, 8, 11, 55, 6),
+    DateTime(2024, 6, 9, 16, 40, 19),
+    DateTime(2024, 6, 10, 20, 25, 50),
+    DateTime(2024, 6, 11, 6, 7, 31),
+    DateTime(2024, 6, 12, 9, 53, 44),
+    DateTime(2024, 6, 8, 19, 41, 2),
+    DateTime(2024, 6, 9, 4, 29, 14),
+    DateTime(2024, 6, 10, 13, 5, 37),
+    DateTime(2024, 6, 11, 17, 48, 22),
+    DateTime(2024, 6, 12, 8, 16, 9),
   ];
 
   @override
   void initState() {
-    // getData();
     super.initState();
   }
 
   getData() async {
-    // numList.shuffle();
-    // colorList.shuffle();
+    for (int i = 0; i < 18; i++) {
+      imageList.shuffle();
+      names.shuffle();
+      reviews.shuffle();
+      dateTimes.shuffle();
+
+      Map<String, dynamic> json = {
+        "name": names[Random().nextInt(names.length)],
+        "image": imageList[Random().nextInt(imageList.length)],
+        "review": reviews[Random().nextInt(reviews.length)],
+        "created_at":
+            Timestamp.fromDate(dateTimes[Random().nextInt(dateTimes.length)]),
+        "rating": Random().nextInt(4) + 2,
+        "product_id": i + 1,
+      };
+      await getIt<DiscoverApiService>().createProduct(json);
+      await Future.delayed(const Duration(seconds: 2));
+    }
+
     // Map<String, dynamic> json = {
     //   "gender": "Unisex",
     //   "id": 18,
@@ -99,30 +191,30 @@ class _MyAppState extends State<MyApp> {
     //   "colors":
     //       List.generate(Random().nextInt(3) + 2, (index) => colorList[index])
     // };
-    try {
-      final fd = await getIt<DiscoverApiService>().getProductList('');
-      // if (fd.isRight) {
-      //   print(fd);
-      //   List<BrandsModel> mdk = fd.right.docs.map((val) => val.data()).toList();
-      // } else {
-      //   print('errorr message is ${fd.left.message}');
-      // }
+    // try {
+    //   final fd = await getIt<DiscoverApiService>().createProduct(json);
+    //   // if (fd.isRight) {
+    //   //   print(fd);
+    //   //   List<BrandsModel> mdk = fd.right.docs.map((val) => val.data()).toList();
+    //   // } else {
+    //   //   print('errorr message is ${fd.left.message}');
+    //   // }
 
-      // return;
-      // QuerySnapshot data = await getIt<FirebaseFirestore>()
-      //     .collection('products')
-      //     .where('brand', isEqualTo: 'Vans')
-      //     // .orderBy('name')
-      //     // .startAfter([''])
-      //     // .limit(2)
-      //     .get();
+    //   // return;
+    //   // QuerySnapshot data = await getIt<FirebaseFirestore>()
+    //   //     .collection('products')
+    //   //     .where('brand', isEqualTo: 'Vans')
+    //   //     // .orderBy('name')
+    //   //     // .startAfter([''])
+    //   //     // .limit(2)
+    //   //     .get();
 
-      for (DocumentSnapshot<ProductModel> item in fd.docs) {
-        print('name is this ${item.data()?.id}');
-      }
-    } catch (e) {
-      print(e);
-    }
+    //   // for (DocumentSnapshot<ProductModel> item in fd.docs) {
+    //   //   print('name is this ${item.data()?.id}');
+    //   // }
+    // } catch (e) {
+    //   print(e);
+    // }
   }
 
   @override

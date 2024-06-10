@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shopping_app/app/discover/data/models/product_model.dart';
 import 'package:shopping_app/app/discover/presentation/blocs/discover_bloc/discover_bloc.dart';
+import 'package:shopping_app/app/discover/presentation/widgets/discover_page_body.dart';
 import 'package:shopping_app/app/discover/presentation/widgets/shimmer_widget.dart';
 import 'package:shopping_app/core/common/enums/enums.dart';
 import 'package:shopping_app/core/common/widgets/app_button_widget.dart';
@@ -29,9 +30,7 @@ class DiscoverPage extends StatefulWidget {
 class _DiscoverPageState extends State<DiscoverPage> {
   @override
   void initState() {
-    context.read<DiscoverBloc>()
-      ..add(const DiscoverGetBrandsEvent())
-      ..add(const DiscoverGetProductListEvent());
+    context.read<DiscoverBloc>().add(const DiscoverGetBrandsEvent());
     super.initState();
   }
 
@@ -50,106 +49,49 @@ class _DiscoverPageState extends State<DiscoverPage> {
         titleSpacing: 30.r,
         actions: [const CartWidget()],
       ),
-      body: BlocBuilder<DiscoverBloc, DiscoverState>(builder: (context, state) {
-        return _buildBody(themeData, bottomPadding, state);
-      }),
-    );
-  }
+      body: BlocBuilder<DiscoverBloc, DiscoverState>(
+          buildWhen: (previous, current) =>
+              previous.brandStatus != current.brandStatus ||
+              previous.brands != current.brands,
+          builder: (context, state) {
+            DataState brandState = state.brandStatus.state;
+            bool loadingBrands = brandState == DataState.loading ||
+                brandState == DataState.initial;
+            int tabLength = loadingBrands ? 1 : state.brands.length;
 
-  Widget _buildBody(
-      ThemeData themeData, double bottomPadding, DiscoverState state) {
-    DataState brandState = state.brandStatus.state;
-    DataState productState = state.tabIndex > 0
-        ? state.productTabs[state.tabIndex - 1].status.state
-        : state.productStatus.state;
-    bool loadingBrands =
-        brandState == DataState.loading || brandState == DataState.initial;
-    bool loadingProducts = productState == DataState.loading ||
-        productState == DataState.initial ||
-        loadingBrands;
-    int tabLength =
-        state.brands == null || loadingBrands ? 1 : state.brands!.length + 1;
-
-    return DefaultTabController(
-      length: tabLength,
-      child: Stack(
-        alignment: AlignmentDirectional.center,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildTabBar(loadingBrands, themeData, tabLength, state),
-              Expanded(
-                child: IgnorePointer(
-                  ignoring: loadingProducts,
-                  child: _buildProductList(
-                      bottomPadding, loadingProducts, state, productState),
-                ),
-              )
-            ],
-          ),
-          Positioned(
-            bottom: bottomPadding + 20.r,
-            child: _buildFilterButton(themeData),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProductList(double bottomPadding, bool loadingProducts,
-      DiscoverState state, DataState productState) {
-    print('loading produt $loadingProducts');
-    int brandIndex = state.tabIndex - 1;
-    return productState == DataState.failure
-        ? Container()
-        : ((state.tabIndex > 0
-                        ? state.productTabs[brandIndex].product
-                        : state.products)
-                    ?.isEmpty ??
-                false)
-            ? const Align(
-                alignment: Alignment(0, -0.2),
-                child: Text(
-                  'No products',
-                ),
-              )
-            : GridView.builder(
-                itemCount: 20,
-                padding: EdgeInsetsDirectional.fromSTEB(
-                    30.r, 15.r, 30.r, 70.r + bottomPadding),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisExtent: loadingProducts ? 150.r : 225.r,
-                  crossAxisSpacing: 15.r,
-                  mainAxisSpacing: 30.r,
-                ),
-                itemBuilder: (context, index) {
-                  return ShimmerWidget(
-                    loading: loadingProducts,
-                    child: (state.tabIndex > 0
-                                ? state.productTabs[brandIndex].product
-                                : state.products) ==
-                            null
-                        ? const SizedBox()
-                        : Builder(builder: (context) {
-                            List<ProductModel> products = state.tabIndex > 0
-                                ? state.productTabs[brandIndex].product!
-                                : state.products!;
-
-                            return ItemPreviewWidget(
-                              item: products[index % products.length],
-                            );
+            return DefaultTabController(
+              length: tabLength,
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildTabBar(loadingBrands, themeData, tabLength, state),
+                      Expanded(
+                        child: TabBarView(
+                          children: List.generate(tabLength, (index) {
+                            if (index == 0) {}
+                            return DiscoverPageBody(
+                                loadingBrands: loadingBrands);
                           }),
-                  );
-                },
-              );
+                        ),
+                      )
+                    ],
+                  ),
+                  Positioned(
+                    bottom: bottomPadding + 20.r,
+                    child: _buildFilterButton(themeData),
+                  ),
+                ],
+              ),
+            );
+          }),
+    );
   }
 
-  Widget _buildTabBar(
-      bool loading, ThemeData themeData, int tabLength, DiscoverState state) {
-    //Do not show the tabs if brands could not be fetched
-    //from the firebase
+  Widget _buildTabBar(bool loadingBrands, ThemeData themeData, int tabLength,
+      DiscoverState state) {
     return state.brandStatus.state == DataState.failure
         ? const SizedBox()
         : ShimmerWidget(
@@ -157,7 +99,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
             margin: EdgeInsetsDirectional.symmetric(horizontal: 30.r),
             shimmerSpacing: 10,
             borderRadius: 10,
-            loading: loading,
+            loading: loadingBrands,
             child: TabBar(
               onTap: (value) {
                 context
@@ -177,9 +119,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
               tabs: List.generate(
                 tabLength,
                 (index) => Tab(
-                  text: index == 0
-                      ? StringManager.all
-                      : state.brands![index - 1].name,
+                  text: state.brands[index].name,
                 ),
               ),
             ),

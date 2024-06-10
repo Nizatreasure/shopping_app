@@ -3,7 +3,7 @@ class BrandsModel {
   final String name;
   final String logo;
 
-  BrandsModel({required this.name, required this.logo});
+  const BrandsModel({required this.name, required this.logo});
 
   Map<String, dynamic> toJson() {
     return {

@@ -2,35 +2,40 @@ part of 'discover_bloc.dart';
 
 @immutable
 class DiscoverState {
-  final List<BrandsModel>? brands;
-  final List<ProductModel>? products;
+  final List<BrandsModel> brands;
+  final List<ProductModel>? filteredProducts;
   final List<ProductTabModel> productTabs;
-  final DataStatus productStatus;
+  final DataStatus filteredProductsStatus;
   final DataStatus brandStatus;
   final int tabIndex;
 
+  //initialize the state with the default values
+  //including the values ‘all‘ product tab
   const DiscoverState({
-    this.brands,
-    this.products,
+    this.brands = const [BrandsModel(name: StringManager.all, logo: '')],
+    this.filteredProducts,
     this.tabIndex = 0,
-    this.productTabs = const [],
+    this.productTabs = const [
+      ProductTabModel(status: DataStatus(state: DataState.initial))
+    ],
     this.brandStatus = const DataStatus(state: DataState.initial),
-    this.productStatus = const DataStatus(state: DataState.initial),
+    this.filteredProductsStatus = const DataStatus(state: DataState.initial),
   });
 
   DiscoverState copyWith({
     List<BrandsModel>? brands,
-    List<ProductModel>? products,
-    DataStatus? productStatus,
+    List<ProductModel>? filteredProducts,
+    DataStatus? filteredProductsStatus,
     DataStatus? brandStatus,
     List<ProductTabModel>? productTabs,
     int? tabIndex,
   }) {
     return DiscoverState(
       brands: brands ?? this.brands,
-      products: products ?? this.products,
+      filteredProducts: filteredProducts ?? this.filteredProducts,
       brandStatus: brandStatus ?? this.brandStatus,
-      productStatus: productStatus ?? this.productStatus,
+      filteredProductsStatus:
+          filteredProductsStatus ?? this.filteredProductsStatus,
       productTabs: productTabs ?? this.productTabs,
       tabIndex: tabIndex ?? this.tabIndex,
     );

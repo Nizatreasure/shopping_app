@@ -6,6 +6,7 @@ import 'package:shopping_app/app/discover/data/models/product_tab_model.dart';
 import 'package:shopping_app/app/discover/domain/usecases/usecases.dart';
 import 'package:shopping_app/core/common/enums/enums.dart';
 import 'package:shopping_app/core/common/network/data_status.dart';
+import 'package:shopping_app/core/values/string_manager.dart';
 
 part 'discover_event.dart';
 part 'discover_state.dart';
@@ -18,7 +19,6 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
       : super(const DiscoverState()) {
     on<DiscoverGetBrandsEvent>(_getBrandsEventHandler);
     on<DiscoverGetProductListEvent>(_getProductListEventHandler);
-    on<DiscoverGetProductsByBrandEvent>(_getProductByBrandEventHandler);
     on<DiscoverTabIndexChangedEvent>(_tabIndexChangedEventHandler);
   }
 
@@ -31,12 +31,18 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
       emit(
         state.copyWith(
           brandStatus: DataStatus.success(),
-          brands: dataSate.right.docs.map((brand) => brand.data()).toList(),
+          brands: List.from(state.brands)
+            ..addAll(dataSate.right.docs.map((brand) => brand.data()).toList()),
           //populate the tab data
-          productTabs: List.generate(
-              dataSate.right.docs.length, (index) => ProductTabModel()),
+          productTabs: List.from(state.productTabs)
+            ..addAll(
+              dataSate.right.docs
+                  .map((brand) => const ProductTabModel())
+                  .toList(),
+            ),
         ),
       );
+      add(const DiscoverGetProductListEvent(0));
     } else {
       emit(state.copyWith(
           brandStatus: DataStatus.failure(exception: dataSate.left)));
@@ -45,44 +51,39 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
 
   _getProductListEventHandler(
       DiscoverGetProductListEvent event, Emitter<DiscoverState> emit) async {
-    emit(state.copyWith(productStatus: DataStatus.loading()));
-    final dataSate = await _getProductListUsecase.execute(params: '');
+    int index = event.index;
 
-    if (dataSate.isRight) {
-      emit(
-        state.copyWith(
-            productStatus: DataStatus.success(),
-            products:
-                dataSate.right.docs.map((product) => product.data()).toList()),
-      );
-    } else {
-      emit(state.copyWith(
-          productStatus: DataStatus.failure(exception: dataSate.left)));
-    }
-  }
-
-  _getProductByBrandEventHandler(DiscoverGetProductsByBrandEvent event,
-      Emitter<DiscoverState> emit) async {
-    int index = event.brandIndex;
-
+    //Do not get data if the data has previously been fetched successfully
     if (state.productTabs[index].status.state == DataState.success) {
       return;
     }
+
+    //update the state to show that the products are loading
     emit(state.copyWith(
       productTabs: List.from(state.productTabs)
         ..[index] =
             state.productTabs[index].copyWith(status: DataStatus.loading()),
     ));
-    final dataSate =
-        await _getProductListUsecase.execute(params: state.brands![index].name);
+
+    //get the products from firebase
+    //pass an empty string to fetch all products
+    final dataSate = await _getProductListUsecase.execute(
+        params: index == 0 ? '' : state.brands[index].name);
 
     if (dataSate.isRight) {
+      //  List<ProductModel> = ;
+      //get the brand information for the product
+
+      //if request was successful, update the state to reflect the new data
       emit(
         state.copyWith(
           productTabs: List.from(state.productTabs)
             ..[index] = state.productTabs[index].copyWith(
-              product:
-                  dataSate.right.docs.map((product) => product.data()).toList(),
+              product: dataSate.right.docs
+                  .map((product) => product.data().copyWith(
+                      brand:
+                          _getProductBrandFromBrandList(product.data().brand)))
+                  .toList(),
               status: DataStatus.success(),
             ),
         ),
@@ -94,15 +95,21 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
               .copyWith(status: DataStatus.failure(exception: dataSate.left)),
       ));
     }
-    print('dddddddd ${state.productTabs[index].product?.length}');
-    print('dddddddd ${state.productTabs[index].status.state}');
   }
 
   _tabIndexChangedEventHandler(
       DiscoverTabIndexChangedEvent event, Emitter<DiscoverState> emit) {
     emit(state.copyWith(tabIndex: event.index));
-    if (event.index > 0) {
-      add(DiscoverGetProductsByBrandEvent(event.index - 1));
+    add(DiscoverGetProductListEvent(event.index));
+  }
+
+  BrandsModel _getProductBrandFromBrandList(BrandsModel brand) {
+    String name = brand.name;
+    List<BrandsModel> brands =
+        state.brands.where((brand) => brand.name == name).toList();
+    if (brands.isEmpty) {
+      return brand; //return the same brand if there is no match
     }
+    return brands.first;
   }
 }
