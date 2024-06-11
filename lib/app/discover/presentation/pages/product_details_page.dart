@@ -16,6 +16,7 @@ import 'package:shopping_app/app/discover/presentation/widgets/product_review_wi
 import 'package:shopping_app/app/discover/presentation/widgets/shimmer_widget.dart';
 import 'package:shopping_app/core/common/enums/enums.dart';
 import 'package:shopping_app/core/common/widgets/app_button_widget.dart';
+import 'package:shopping_app/core/common/widgets/app_snackbar.dart';
 import 'package:shopping_app/core/common/widgets/appbar_widget.dart';
 import 'package:shopping_app/core/common/widgets/cart_widget.dart';
 import 'package:shopping_app/core/common/widgets/custom_network_image.dart';
@@ -135,26 +136,7 @@ class ProductDetailsPage extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            StringManager.price,
-                            style: themeData.textTheme.bodySmall!.copyWith(
-                                height: 22 / 12,
-                                color: ColorManager.primaryLight300),
-                          ),
-                          Text(
-                            '${state.productDetails!.price.symbol}${Globals.amountFormat.format(state.productDetails!.price.amount)}',
-                            style: themeData.textTheme.headlineMedium!.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              height: 30 / 20,
-                            ),
-                          )
-                        ],
-                      ),
+                      child: _productPriceDetailsWidget(themeData, state),
                     ),
                     AppButtonWidget(
                       text: StringManager.addToCart.toUpperCase(),
@@ -162,6 +144,16 @@ class ProductDetailsPage extends StatelessWidget {
                       padding:
                           EdgeInsetsDirectional.symmetric(horizontal: 31.5.r),
                       onTap: () async {
+                        if (state.selectedColor == null) {
+                          showAppMaterialBanner(context,
+                              text: 'Please select a product color');
+                          return;
+                        }
+                        if (state.selectedSize == null) {
+                          showAppMaterialBanner(context,
+                              text: 'Please select a product size');
+                          return;
+                        }
                         bool success = await addToCart(context);
                         if (success && context.mounted) {
                           addedToCart(context);
@@ -174,6 +166,29 @@ class ProductDetailsPage extends StatelessWidget {
             )
           : const SizedBox();
     });
+  }
+
+  Widget _productPriceDetailsWidget(
+      ThemeData themeData, ProductDetailsState state) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          StringManager.price,
+          style: themeData.textTheme.bodySmall!
+              .copyWith(height: 22 / 12, color: ColorManager.primaryLight300),
+        ),
+        Text(
+          '${state.productDetails!.price.symbol}${Globals.amountFormat.format(state.productDetails!.price.amount)}',
+          style: themeData.textTheme.headlineMedium!.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            height: 30 / 20,
+          ),
+        )
+      ],
+    );
   }
 
   Widget _buildProductNameAndRating(ThemeData themeData) {
@@ -381,15 +396,17 @@ class ProductDetailsPage extends StatelessWidget {
   }
 
   Future<bool> addToCart(BuildContext context) async {
+    ProductDetailsBloc bloc = context.read<ProductDetailsBloc>();
     bool? successful = await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useRootNavigator: true,
       constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height -
               MediaQuery.of(context).viewPadding.top -
               20.r),
       builder: (context) {
-        return const AddToCartModal();
+        return AddToCartModal(bloc: bloc, parentContext: context);
       },
     );
     return successful == true;

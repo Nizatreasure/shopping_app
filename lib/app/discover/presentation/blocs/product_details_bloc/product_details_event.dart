@@ -29,3 +29,8 @@ class ProductDetailsGetTopThreeReviewsEvent extends ProductDetailsEvent {
   final int productID;
   const ProductDetailsGetTopThreeReviewsEvent(this.productID);
 }
+
+class ProductDetailsChangeQuantityEvent extends ProductDetailsEvent {
+  final int quantity;
+  const ProductDetailsChangeQuantityEvent(this.quantity);
+}

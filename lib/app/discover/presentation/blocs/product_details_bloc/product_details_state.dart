@@ -9,6 +9,9 @@ class ProductDetailsState {
   final int imageIndex;
   final List<ProductReviewModel>? productReviews;
   final DataStatus reviewStatus;
+  final int quantity;
+
+  double get totalPrice => (productDetails?.price.amount ?? 0) * quantity;
 
   bool get loading =>
       productStatus.state == DataState.loading ||
@@ -28,6 +31,7 @@ class ProductDetailsState {
     this.selectedColor,
     this.selectedSize,
     this.imageIndex = 0,
+    this.quantity = 1,
   });
 
   ProductDetailsState copyWith({
@@ -38,6 +42,7 @@ class ProductDetailsState {
     int? imageIndex,
     List<ProductReviewModel>? productReviews,
     DataStatus? reviewStatus,
+    int? quantity,
   }) {
     return ProductDetailsState(
       productDetails: productDetails ?? this.productDetails,
@@ -47,6 +52,7 @@ class ProductDetailsState {
       imageIndex: imageIndex ?? this.imageIndex,
       productReviews: productReviews ?? this.productReviews,
       reviewStatus: reviewStatus ?? this.reviewStatus,
+      quantity: quantity ?? this.quantity,
     );
   }
 }

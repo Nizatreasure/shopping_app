@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shopping_app/app/discover/presentation/blocs/product_details_bloc/product_details_bloc.dart';
 import 'package:shopping_app/core/common/enums/enums.dart';
 import 'package:shopping_app/core/common/widgets/app_button_widget.dart';
+import 'package:shopping_app/core/common/widgets/app_snackbar.dart';
 import 'package:shopping_app/core/common/widgets/modify_quantity_button.dart';
+import 'package:shopping_app/core/constants/constants.dart';
 import 'package:shopping_app/core/values/asset_manager.dart';
 import 'package:shopping_app/core/values/color_manager.dart';
 import 'package:shopping_app/core/values/string_manager.dart';
 import 'package:shopping_app/globals.dart';
 
 class AddToCartModal extends StatelessWidget {
-  const AddToCartModal({super.key});
+  final BuildContext parentContext;
+  final ProductDetailsBloc bloc;
+  const AddToCartModal(
+      {super.key, required this.bloc, required this.parentContext});
 
   @override
   Widget build(BuildContext context) {
@@ -19,79 +27,94 @@ class AddToCartModal extends StatelessWidget {
 
     double viewInsets = MediaQuery.of(context).viewInsets.bottom;
     double viewPadding = MediaQuery.of(context).viewPadding.bottom;
-    return AnimatedContainer(
-      width: double.infinity,
-      duration: const Duration(milliseconds: 100),
-      padding: EdgeInsetsDirectional.only(
-        start: 30.r,
-        end: 20.r,
-        bottom: (viewInsets > 50 ? 0 : viewPadding) + 20.r,
-      ),
-      margin: EdgeInsetsDirectional.only(bottom: viewInsets),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildDragHandler(),
-          Flexible(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return BlocProvider.value(
+      value: bloc,
+      child: AnimatedContainer(
+        width: double.infinity,
+        duration: const Duration(milliseconds: 100),
+        padding: EdgeInsetsDirectional.only(
+          start: 30.r,
+          end: 20.r,
+          bottom: (viewInsets > 50 ? 0 : viewPadding) + 20.r,
+        ),
+        margin: EdgeInsetsDirectional.only(bottom: viewInsets),
+        child: BlocBuilder<ProductDetailsBloc, ProductDetailsState>(
+            builder: (context, state) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildDragHandler(),
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            StringManager.addToCart,
+                            style: themeData.textTheme.headlineMedium!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              height: 30 / 20,
+                              fontSize: 20,
+                            ),
+                          ),
+                          _buildCloseButton(context)
+                        ],
+                      ),
+                      SizedBox(height: 30.r),
                       Text(
-                        StringManager.addToCart,
-                        style: themeData.textTheme.headlineMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                          height: 30 / 20,
-                          fontSize: 20,
-                        ),
+                        StringManager.quantity,
+                        style: themeData.textTheme.titleMedium!.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            height: 24 / 14),
                       ),
-                      _buildCloseButton(context)
+                      SizedBox(height: 10.r),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: _buildTextInput(context, themeData),
+                          ),
+                          _buildQuantityButtons(context, state),
+                        ],
+                      ),
+                      SizedBox(height: 20.r),
+                      Divider(
+                        color: ColorManager.primaryDefault500,
+                        height: 0,
+                        thickness: 1.r,
+                      ),
+                      SizedBox(height: 30.r),
+                      _buildPriceAndButton(context, themeData, state),
                     ],
                   ),
-                  SizedBox(height: 30.r),
-                  Text(
-                    StringManager.quantity,
-                    style: themeData.textTheme.titleMedium!.copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        height: 24 / 14),
-                  ),
-                  SizedBox(height: 10.r),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: _buildTextInput(themeData),
-                      ),
-                      _buildQuantityButtons(),
-                    ],
-                  ),
-                  SizedBox(height: 20.r),
-                  Divider(
-                    color: ColorManager.primaryDefault500,
-                    height: 0,
-                    thickness: 1.r,
-                  ),
-                  SizedBox(height: 30.r),
-                  _buildPriceAndButton(context, themeData),
-                ],
+                ),
               ),
-            ),
-          ),
-        ],
+            ],
+          );
+        }),
       ),
     );
   }
 
-  Widget _buildTextInput(ThemeData themeData) {
+  Widget _buildTextInput(BuildContext context, ThemeData themeData) {
     return SizedBox(
       height: 24.r,
       child: TextFormField(
+        controller: context.read<ProductDetailsBloc>().quantityController,
         textAlignVertical: TextAlignVertical.center,
+        onChanged: (value) {
+          int quantity = int.tryParse(value) ?? 0;
+          context
+              .read<ProductDetailsBloc>()
+              .add(ProductDetailsChangeQuantityEvent(quantity));
+        },
+        keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: const InputDecoration(
           contentPadding: EdgeInsetsDirectional.zero,
           border: InputBorder.none,
@@ -105,7 +128,8 @@ class AddToCartModal extends StatelessWidget {
     );
   }
 
-  Widget _buildPriceAndButton(BuildContext context, ThemeData themeData) {
+  Widget _buildPriceAndButton(
+      BuildContext context, ThemeData themeData, ProductDetailsState state) {
     return SizedBox(
       height: 57.r,
       child: Row(
@@ -121,7 +145,7 @@ class AddToCartModal extends StatelessWidget {
                       height: 22 / 12, color: ColorManager.primaryLight300),
                 ),
                 Text(
-                  Globals.amountFormat.format(235),
+                  '${state.productDetails!.price.symbol}${Globals.amountFormat.format(state.totalPrice)}',
                   style: themeData.textTheme.headlineMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -136,6 +160,11 @@ class AddToCartModal extends StatelessWidget {
             shrinkToFitChildSize: true,
             padding: EdgeInsetsDirectional.symmetric(horizontal: 31.5.r),
             onTap: () async {
+              if (state.quantity < 1) {
+                showAppMaterialBanner(parentContext,
+                    text: 'Quantity must not be less than 1');
+                return;
+              }
               context.pop(true);
             },
           )
@@ -144,19 +173,28 @@ class AddToCartModal extends StatelessWidget {
     );
   }
 
-  Widget _buildQuantityButtons() {
+  Widget _buildQuantityButtons(
+      BuildContext context, ProductDetailsState state) {
     return Row(
       children: [
         ModifyQuantityButton(
           buttonType: ModifyQuantityButtonType.minus,
-          enabled: false,
-          onTap: () {},
+          enabled: state.quantity > 1,
+          onTap: () {
+            context
+                .read<ProductDetailsBloc>()
+                .add(ProductDetailsChangeQuantityEvent(state.quantity - 1));
+          },
         ),
         SizedBox(width: 20.r),
         ModifyQuantityButton(
           buttonType: ModifyQuantityButtonType.add,
-          enabled: true,
-          onTap: () {},
+          enabled: state.quantity < AppConstants.maxQuantityForProduct,
+          onTap: () {
+            context
+                .read<ProductDetailsBloc>()
+                .add(ProductDetailsChangeQuantityEvent(state.quantity + 1));
+          },
         ),
       ],
     );
