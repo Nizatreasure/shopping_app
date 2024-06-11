@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
@@ -412,8 +414,21 @@ class ProductDetailsPage extends StatelessWidget {
     return successful == true;
   }
 
-  void addedToCart(BuildContext context) {
-    showModalBottomSheet(
-        context: context, builder: (context) => const AddedToCartModal());
+  void addedToCart(BuildContext context) async {
+    //using a completer so to wait while the bloc executes
+    //the transaction
+    //a boolean complete is used to listen if the operation was
+    //successful or not
+    Completer<bool> completer = Completer<bool>();
+    context
+        .read<ProductDetailsBloc>()
+        .add(ProductDetailsAddProductToCartEvent(completer));
+    bool success = await completer.future;
+    if (success && context.mounted) {
+      showModalBottomSheet(
+          context: context, builder: (context) => const AddedToCartModal());
+    } else if (context.mounted) {
+      showAppMaterialBanner(context, text: 'Failed to add product to cart');
+    }
   }
 }

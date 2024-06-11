@@ -34,3 +34,8 @@ class ProductDetailsChangeQuantityEvent extends ProductDetailsEvent {
   final int quantity;
   const ProductDetailsChangeQuantityEvent(this.quantity);
 }
+
+class ProductDetailsAddProductToCartEvent extends ProductDetailsEvent {
+  final Completer<bool> completer;
+  const ProductDetailsAddProductToCartEvent(this.completer);
+}

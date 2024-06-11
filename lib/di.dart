@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:shopping_app/app/cart/data/data_sources/cart_remote_data_sources.dart';
+import 'package:shopping_app/app/cart/data/data_sources/remote/cart_api_service.dart';
+import 'package:shopping_app/app/cart/data/repositories/cart_repository_impl.dart';
 import 'package:shopping_app/app/discover/data/data_sources/remote_data_sources.dart';
 import 'package:shopping_app/app/discover/data/models/product_review_model.dart';
 import 'package:shopping_app/app/discover/presentation/blocs/discover_bloc/discover_bloc.dart';
@@ -9,6 +12,7 @@ import 'package:shopping_app/app/discover/presentation/blocs/product_review_bloc
 import 'package:shopping_app/core/constants/constants.dart';
 import 'package:shopping_app/core/values/string_manager.dart';
 
+import 'app/cart/domain/usecases/usecases.dart';
 import 'app/discover/data/data_sources/remote/api_service.dart';
 import 'app/discover/data/repositories/discover_repository_impl.dart';
 import 'app/discover/domain/usecases/usecases.dart';
@@ -30,14 +34,18 @@ Future<void> initializeDependencies() async {
   getIt
       .registerSingleton<NetworkRequestService>(NetworkRequestService(getIt()));
   getIt.registerSingleton<DiscoverApiService>(DiscoverApiService(getIt()));
+  getIt.registerSingleton<CartApiService>(CartApiService(getIt()));
 
   //remote data sources
   getIt.registerSingleton<DiscoverRemoteDataSource>(
       DiscoverRemoteDataSourceImpl(getIt()));
+  getIt.registerSingleton<CartRemoteDataSources>(
+      CartRemoteDataSourcesImpl(getIt()));
 
   //repositories
   getIt.registerSingleton<DiscoverRepository>(
       DiscoverRepositoryImpl(getIt(), getIt()));
+  getIt.registerSingleton<CartRepository>(CartRepositoryImpl(getIt(), getIt()));
 
   //usecases
   getIt.registerSingleton<GetBrandsUsecase>(GetBrandsUsecase(getIt()));
@@ -51,12 +59,14 @@ Future<void> initializeDependencies() async {
       GetProductReviewsUsecase(getIt()));
   getIt.registerSingleton<GetTopThreeReviewsUsecase>(
       GetTopThreeReviewsUsecase(getIt()));
+  getIt.registerSingleton<AddProductToCartUsecase>(
+      AddProductToCartUsecase(getIt()));
 
   //blocs
   getIt.registerFactory<DiscoverBloc>(
       () => DiscoverBloc(getIt(), getIt(), getIt()));
   getIt.registerFactory<ProductDetailsBloc>(
-      () => ProductDetailsBloc(getIt(), getIt()));
+      () => ProductDetailsBloc(getIt(), getIt(), getIt()));
   getIt.registerFactory<ProductReviewBloc>(
       () => ProductReviewBloc(_reviewTabs.reversed.toList(), getIt()));
 }

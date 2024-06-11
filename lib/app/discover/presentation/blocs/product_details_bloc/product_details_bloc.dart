@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:shopping_app/app/cart/data/models/cart_model.dart';
+import 'package:shopping_app/app/cart/domain/usecases/add_product_to_cart_usecase.dart';
 import 'package:shopping_app/app/discover/data/models/product_model.dart';
 import 'package:shopping_app/app/discover/data/models/product_review_model.dart';
 import 'package:shopping_app/app/discover/domain/usecases/usecases.dart';
@@ -16,11 +19,12 @@ class ProductDetailsBloc
     extends Bloc<ProductDetailsEvent, ProductDetailsState> {
   final GetProductDetailUsecase _getProductDetailUsecase;
   final GetTopThreeReviewsUsecase _getTopThreeReviewsUsecase;
+  final AddProductToCartUsecase _addProductToCartUsecase;
   final TextEditingController _quantityController = TextEditingController();
   TextEditingController get quantityController => _quantityController;
 
-  ProductDetailsBloc(
-      this._getProductDetailUsecase, this._getTopThreeReviewsUsecase)
+  ProductDetailsBloc(this._getProductDetailUsecase,
+      this._getTopThreeReviewsUsecase, this._addProductToCartUsecase)
       : super(const ProductDetailsState()) {
     _quantityController.text = state.quantity.toString();
     on<ProductDetailsGetProductDetailsEvent>(_getProductDetailsEventHandler);
@@ -29,6 +33,7 @@ class ProductDetailsBloc
     on<ProductDetailsSetSizeEvent>(_setSizeEventHandler);
     on<ProductDetailsGetTopThreeReviewsEvent>(_getTopThreeReviewsEventHandler);
     on<ProductDetailsChangeQuantityEvent>(_changeQuantityEventHandler);
+    on<ProductDetailsAddProductToCartEvent>(_addProductToCartEventHandler);
   }
 
   _getProductDetailsEventHandler(ProductDetailsGetProductDetailsEvent event,
@@ -87,5 +92,18 @@ class ProductDetailsBloc
       _quantityController.text = quantity.toString();
     }
     emit(state.copyWith(quantity: quantity));
+  }
+
+  _addProductToCartEventHandler(ProductDetailsAddProductToCartEvent event,
+      Emitter<ProductDetailsState> emit) async {
+    final dataState = await _addProductToCartUsecase.execute(
+        params: CartModel.fromProduct(
+      state.productDetails!,
+      color: state.selectedColor!.name,
+      quantity: state.quantity,
+      size: state.selectedSize!,
+    ));
+
+    event.completer.complete(dataState.isRight);
   }
 }

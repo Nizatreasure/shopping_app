@@ -1,24 +1,14 @@
-import 'dart:developer';
-import 'dart:io';
-import 'dart:math';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shopping_app/app/discover/data/data_sources/remote/api_service.dart';
-import 'package:shopping_app/app/discover/data/models/brands_model.dart';
-import 'package:shopping_app/app/discover/data/models/filter_model.dart';
-import 'package:shopping_app/app/discover/data/repositories/discover_repository_impl.dart';
+import 'package:shopping_app/app/cart/data/models/cart_model.dart';
 import 'package:shopping_app/blocs.dart';
-import 'package:shopping_app/core/common/enums/enums.dart';
 import 'package:shopping_app/core/constants/constants.dart';
-import 'package:shopping_app/core/values/string_manager.dart';
 import 'package:shopping_app/di.dart';
 import 'package:shopping_app/globals.dart';
 
+import 'app/cart/data/repositories/cart_repository_impl.dart';
 import 'app/discover/data/models/product_model.dart';
-import 'app/discover/domain/usecases/usecases.dart';
 import 'core/routes/router.dart';
 import 'core/values/theme_manager.dart';
 
@@ -98,10 +88,19 @@ class _MyAppState extends State<MyApp> {
   }
 
   getData() async {
-    final data = await getIt<GetProductReviewsUsecase>()
-        .execute(params: {'product_id': 1, 'rating': 4});
-
-    print('suppeored tod ${data.right.docs.length}');
+    await getIt<CartRepository>().addProductToCart(CartModel(
+      id: 0,
+      docID: 'docID',
+      productName: 'productName',
+      brandName: brandName,
+      color: 'color',
+      size: 23,
+      price: PriceModel(amount: 200, currency: 'USD', symbol: r'$'),
+      quantity: 2,
+      imageUrl: 'imageUrl',
+      productID: 0,
+      productDocumentID: 'productDocumentID',
+    ));
   }
 
   @override
