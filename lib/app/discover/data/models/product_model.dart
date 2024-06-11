@@ -42,7 +42,8 @@ class ProductModel {
       createdAt: (data['created_at'] as Timestamp? ?? Timestamp.now()).toDate(),
       price: PriceModel.fromJson(data['price'] ?? {}),
       reviewInfo: ReviewInfoModel.fromJson(data['review_info'] ?? {}),
-      brand: BrandsModel(name: data['brand'] ?? '', logo: ''),
+      brand: BrandsModel(
+          name: data['brand'] ?? '', logo: '', totalProductCount: 0),
       description: data['description'] ?? '',
       sizes: List<num>.from((data['sizes'] as List? ?? []).map((size) => size)),
       name: data['name'] ?? '',

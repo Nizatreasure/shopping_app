@@ -13,7 +13,9 @@ class DiscoverState {
   //initialize the state with the default values
   //including the values ‘all‘ product tab
   const DiscoverState({
-    this.brands = const [BrandsModel(name: StringManager.all, logo: '')],
+    this.brands = const [
+      BrandsModel(name: StringManager.all, logo: '', totalProductCount: 0)
+    ],
     this.filteredProducts,
     this.tabIndex = 0,
     this.productTabs = const [

@@ -174,7 +174,7 @@ class _MyAppState extends State<MyApp> {
   getData() async {
     final data = await getIt<DiscoverApiService>().getFilteredProductList(
       FilterModel(
-        brand: BrandsModel(name: 'Puma', logo: ''),
+        brand: BrandsModel(name: 'Puma', logo: '', totalProductCount: 0),
         gender: Gender.man,
         sortBy: SortByModel(sortBy: SortBy.highestReviews, descending: true),
         color: ColorModel(color: Colors.white, name: StringManager.white),

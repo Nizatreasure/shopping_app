@@ -161,7 +161,7 @@ class _BrandsFilterWidgetState extends State<BrandsFilterWidget> {
                   .copyWith(fontWeight: FontWeight.bold, height: 24 / 14),
             ),
             Text(
-              '1001 items',
+              '${brand.totalProductCount} items',
               textAlign: TextAlign.center,
               style: themeData.textTheme.bodySmall!
                   .copyWith(fontSize: 11, color: ColorManager.primaryLight300),
