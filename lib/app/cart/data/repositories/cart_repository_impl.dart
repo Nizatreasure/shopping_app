@@ -18,4 +18,28 @@ class CartRepositoryImpl implements CartRepository {
       return _cartRemoteDataSources.addProductToCart(cartModel);
     });
   }
+
+  @override
+  Future<Either<DataFailure, Stream<List<CartModel>>>> getCartItems() {
+    return _networkRequestService.makeRequest(request: () {
+      return _cartRemoteDataSources.getCartItems();
+    });
+  }
+
+  @override
+  Future<Either<DataFailure, void>> updateCartItemQuantity(
+      {required CartModel cartModel, required String cartDocumentID}) {
+    return _networkRequestService.makeRequest(request: () {
+      return _cartRemoteDataSources.updateCartItemQuantity(
+          cartModel: cartModel, cartDocumentID: cartDocumentID);
+    });
+  }
+
+  @override
+  Future<Either<DataFailure, void>> deleteProductFromCart(
+      String cartDocumentID) {
+    return _networkRequestService.makeRequest(request: () {
+      return _cartRemoteDataSources.deleteProductFromCart(cartDocumentID);
+    });
+  }
 }

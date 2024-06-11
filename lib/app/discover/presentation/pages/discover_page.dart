@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shopping_app/app/cart/presentation/blocs/cart_bloc/cart_bloc.dart';
 import 'package:shopping_app/app/discover/data/models/product_model.dart';
 import 'package:shopping_app/app/discover/presentation/blocs/discover_bloc/discover_bloc.dart';
 import 'package:shopping_app/app/discover/presentation/widgets/discover_page_body.dart';
@@ -31,6 +32,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
   @override
   void initState() {
     context.read<DiscoverBloc>().add(const DiscoverGetBrandsEvent());
+    context.read<CartBloc>().add(const CartGetCartItemsEvent());
     super.initState();
   }
 

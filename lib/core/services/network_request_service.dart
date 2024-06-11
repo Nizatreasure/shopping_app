@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 
@@ -9,7 +11,7 @@ class NetworkRequestService {
   NetworkRequestService(this._connectionChecker);
 
   Future<Either<DataFailure, Output>> makeRequest<Output>(
-      {required Future<Output> Function() request}) async {
+      {required FutureOr<Output> Function() request}) async {
     if (await _connectionChecker.isConnected) {
       try {
         final response = await request();

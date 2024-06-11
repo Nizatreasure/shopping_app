@@ -10,6 +10,7 @@ class ProductDetailsState {
   final List<ProductReviewModel>? productReviews;
   final DataStatus reviewStatus;
   final int quantity;
+  final String? cartDocumentID;
 
   double get totalPrice => (productDetails?.price.amount ?? 0) * quantity;
 
@@ -32,6 +33,7 @@ class ProductDetailsState {
     this.selectedSize,
     this.imageIndex = 0,
     this.quantity = 1,
+    this.cartDocumentID,
   });
 
   ProductDetailsState copyWith({
@@ -43,6 +45,7 @@ class ProductDetailsState {
     List<ProductReviewModel>? productReviews,
     DataStatus? reviewStatus,
     int? quantity,
+    String? cartDocumentID,
   }) {
     return ProductDetailsState(
       productDetails: productDetails ?? this.productDetails,
@@ -53,6 +56,7 @@ class ProductDetailsState {
       productReviews: productReviews ?? this.productReviews,
       reviewStatus: reviewStatus ?? this.reviewStatus,
       quantity: quantity ?? this.quantity,
+      cartDocumentID: cartDocumentID ?? this.cartDocumentID,
     );
   }
 }

@@ -30,8 +30,27 @@ class CartApiService {
       await _cartReference
           .withConverter<CartModel>(
               fromFirestore: (snapshot, _) => CartModel.fromJson(snapshot),
-              toFirestore: (brands, _) => brands.toJson())
+              toFirestore: (cart, _) => cart.toJson())
           .add(cartItem);
     });
+  }
+
+  //Using firebase stream so that the cart would be up-to-date with
+  //the latest information once a change occurs in the collection
+  Stream<List<CartModel>> getCartItems() {
+    return _cartReference.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) => CartModel.fromJson(doc)).toList();
+    });
+  }
+
+  //update the product quantity in the database
+  Future<void> updateCartItem(
+      {required CartModel cartModel, required String cartDocumentID}) async {
+    await _cartReference.doc(cartDocumentID).update(cartModel.toJson());
+  }
+
+  //update the product quantity in the database
+  Future<void> deleteProductFromCart(String cartDocumentID) async {
+    await _cartReference.doc(cartDocumentID).delete();
   }
 }

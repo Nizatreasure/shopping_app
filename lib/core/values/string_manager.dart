@@ -31,6 +31,7 @@ class StringManager {
   static const String totalPrice = 'Total Price';
   static const String addedToCart = 'Added To Cart';
   static const String itemTotal = 'Item Total';
+  static const String itemsTotal = 'Items Total';
   static const String backExplore = 'Back Explore';
   static const String toCart = 'To Cart';
   static const String grandTotal = 'Grand Total';
@@ -53,5 +54,11 @@ class StringManager {
   static const String retry = 'Retry';
   static const String noProduct = 'No product';
   static const String noReview = 'No review';
-  // static const String _!dfdsf = '';
+  static const String noProductInCart = 'No product in cart';
+  static const String deleteConfirmation =
+      'Are you sure you want to remove this product from your cart?';
+  static const String no = 'No';
+  static const String yes = 'Yes';
+  static const String removeFromCartFailed =
+      'Failed to remove product from cart';
 }

@@ -88,19 +88,26 @@ class _MyAppState extends State<MyApp> {
   }
 
   getData() async {
-    await getIt<CartRepository>().addProductToCart(CartModel(
-      id: 0,
-      docID: 'docID',
-      productName: 'productName',
-      brandName: brandName,
-      color: 'color',
-      size: 23,
-      price: PriceModel(amount: 200, currency: 'USD', symbol: r'$'),
-      quantity: 2,
-      imageUrl: 'imageUrl',
-      productID: 0,
-      productDocumentID: 'productDocumentID',
-    ));
+    // final data = await getIt<CartRepository>().getCartItems();
+    // if (data.isRight) {
+    //   data.right.listen((data) {
+    //     print('name of brand is this ${data.first.brandName}');
+    //     print('product length is ${data.length}');
+    //   });
+    // }
+    // (CartModel(
+    //   id: 0,
+    //   docID: 'docID',
+    //   productName: 'productName',
+    //   brandName: brandName,
+    //   color: 'color',
+    //   size: 23,
+    //   price: PriceModel(amount: 200, currency: 'USD', symbol: r'$'),
+    //   quantity: 2,
+    //   imageUrl: 'imageUrl',
+    //   productID: 0,
+    //   productDocumentID: 'productDocumentID',
+    // ));
   }
 
   @override

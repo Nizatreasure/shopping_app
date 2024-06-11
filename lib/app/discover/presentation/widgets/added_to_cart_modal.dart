@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shopping_app/app/cart/presentation/blocs/cart_bloc/cart_bloc.dart';
 import 'package:shopping_app/core/common/widgets/app_button_widget.dart';
 import 'package:shopping_app/core/routes/router.dart';
 import 'package:shopping_app/core/values/asset_manager.dart';
@@ -33,14 +35,17 @@ class AddedToCartModal extends StatelessWidget {
                 fontSize: 24, fontWeight: FontWeight.w600, height: 34 / 24),
           ),
           SizedBox(height: 5.r),
-          Text(
-            '1 ${StringManager.itemTotal}',
-            style: themeData.textTheme.bodyMedium!.copyWith(
-              fontSize: 14,
-              color: ColorManager.primaryLight400,
-              height: 24 / 14,
-            ),
-          ),
+          Builder(builder: (context) {
+            int count = context.read<CartBloc>().state.cartItemsCount;
+            return Text(
+              '$count ${count > 1 ? StringManager.itemsTotal : StringManager.itemTotal}',
+              style: themeData.textTheme.bodyMedium!.copyWith(
+                fontSize: 14,
+                color: ColorManager.primaryLight400,
+                height: 24 / 14,
+              ),
+            );
+          }),
           SizedBox(height: 20.r),
           _buildButtons(context, themeData),
         ],
@@ -86,7 +91,7 @@ class AddedToCartModal extends StatelessWidget {
             onTap: () {
               context
                 ..pop()
-                ..pushNamed(RouteNames.cart);
+                ..pushReplacementNamed(RouteNames.cart);
             },
           ),
         ),

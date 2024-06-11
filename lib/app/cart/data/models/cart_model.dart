@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:shopping_app/app/discover/data/models/product_model.dart';
 
 class CartModel {
@@ -6,13 +7,19 @@ class CartModel {
   final String docID;
   final String productName;
   final String brandName;
-  final String color;
+  final ColorModel color;
   final num size;
   final PriceModel price;
   final int quantity;
   final String imageUrl;
   final int productID;
   final String productDocumentID;
+  final Key imageKey;
+
+  //used to track when a cart object is updating
+  final bool loading;
+
+  double get totalPrice => price.amount * quantity;
 
   CartModel({
     required this.id,
@@ -26,11 +33,13 @@ class CartModel {
     required this.imageUrl,
     required this.productID,
     required this.productDocumentID,
+    required this.imageKey,
+    this.loading = false,
   });
 
   factory CartModel.fromProduct(
     ProductModel product, {
-    required String color,
+    required ColorModel color,
     num size = 1,
     int id = 0,
     int quantity = 1,
@@ -48,6 +57,7 @@ class CartModel {
       imageUrl: product.images.first.image,
       productID: product.id,
       productDocumentID: product.documentID,
+      imageKey: UniqueKey(),
     );
   }
 
@@ -58,13 +68,14 @@ class CartModel {
       docID: doc.id,
       productName: data['product_name'] ?? '',
       brandName: data['brand_name'] ?? '',
-      color: data['color'] ?? '',
+      color: ColorModel.fromJson(data['color'] ?? {}),
       size: data['size'] ?? 0,
       price: PriceModel.fromJson(data['price'] ?? {}),
       quantity: ((data['quantity'] ?? 0) as num).toInt(),
-      imageUrl: data['imageUrl'] ?? '',
+      imageUrl: data['image_url'] ?? '',
       productID: ((data['product_id'] ?? 0) as num).toInt(),
       productDocumentID: data['product_document_id'] ?? '',
+      imageKey: UniqueKey(),
     );
   }
 
@@ -73,7 +84,7 @@ class CartModel {
       'id': id,
       'product_name': productName,
       'brand_name': brandName,
-      'color': color,
+      'color': color.toJson(),
       'size': size,
       'price': price.toJson(),
       'quantity': quantity,
@@ -87,7 +98,7 @@ class CartModel {
   CartModel copyWith({
     String? productName,
     String? brandName,
-    String? color,
+    ColorModel? color,
     num? size,
     PriceModel? price,
     int? quantity,
@@ -96,6 +107,8 @@ class CartModel {
     String? productDocumentID,
     int? id,
     String? docID,
+    Key? imageKey,
+    bool? loading,
   }) {
     return CartModel(
       id: id ?? this.id,
@@ -109,6 +122,8 @@ class CartModel {
       imageUrl: imageUrl ?? this.imageUrl,
       productID: productID ?? this.productID,
       productDocumentID: productDocumentID ?? this.productDocumentID,
+      imageKey: imageKey ?? this.imageKey,
+      loading: loading ?? this.loading,
     );
   }
 }

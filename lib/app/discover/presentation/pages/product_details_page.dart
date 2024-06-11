@@ -408,7 +408,7 @@ class ProductDetailsPage extends StatelessWidget {
               MediaQuery.of(context).viewPadding.top -
               20.r),
       builder: (context) {
-        return AddToCartModal(bloc: bloc, parentContext: context);
+        return AddToCartModal(bloc: bloc);
       },
     );
     return successful == true;

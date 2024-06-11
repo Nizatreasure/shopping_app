@@ -4,6 +4,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shopping_app/app/cart/data/data_sources/cart_remote_data_sources.dart';
 import 'package:shopping_app/app/cart/data/data_sources/remote/cart_api_service.dart';
 import 'package:shopping_app/app/cart/data/repositories/cart_repository_impl.dart';
+import 'package:shopping_app/app/cart/presentation/blocs/cart_bloc/cart_bloc.dart';
 import 'package:shopping_app/app/discover/data/data_sources/remote_data_sources.dart';
 import 'package:shopping_app/app/discover/data/models/product_review_model.dart';
 import 'package:shopping_app/app/discover/presentation/blocs/discover_bloc/discover_bloc.dart';
@@ -61,14 +62,20 @@ Future<void> initializeDependencies() async {
       GetTopThreeReviewsUsecase(getIt()));
   getIt.registerSingleton<AddProductToCartUsecase>(
       AddProductToCartUsecase(getIt()));
+  getIt.registerSingleton<GetCartItemsUsecase>(GetCartItemsUsecase(getIt()));
+  getIt
+      .registerSingleton<UpdateCartItemUsecase>(UpdateCartItemUsecase(getIt()));
+  getIt.registerSingleton<DeleteProductFromCartUsecase>(
+      DeleteProductFromCartUsecase(getIt()));
 
   //blocs
   getIt.registerFactory<DiscoverBloc>(
       () => DiscoverBloc(getIt(), getIt(), getIt()));
   getIt.registerFactory<ProductDetailsBloc>(
-      () => ProductDetailsBloc(getIt(), getIt(), getIt()));
+      () => ProductDetailsBloc(getIt(), getIt(), getIt(), getIt()));
   getIt.registerFactory<ProductReviewBloc>(
       () => ProductReviewBloc(_reviewTabs.reversed.toList(), getIt()));
+  getIt.registerFactory<CartBloc>(() => CartBloc(getIt(), getIt(), getIt()));
 }
 
 //

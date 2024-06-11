@@ -35,6 +35,10 @@ class ProductModel {
 
   factory ProductModel.fromJson(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
+    //sorting the product sizes from smallest to biggest
+    List<num> productSizes =
+        List<num>.from((data['sizes'] as List? ?? []).map((size) => size));
+    productSizes.sort((a, b) => a.compareTo(b));
     return ProductModel(
       id: ((data['id'] ?? 0) as num).toInt(),
       documentID: doc.id,
@@ -45,7 +49,7 @@ class ProductModel {
       brand: BrandsModel(
           name: data['brand'] ?? '', logo: '', totalProductCount: 0),
       description: data['description'] ?? '',
-      sizes: List<num>.from((data['sizes'] as List? ?? []).map((size) => size)),
+      sizes: productSizes,
       name: data['name'] ?? '',
       images: List<ImageModel>.from((data['images'] as List? ?? [])
           .map((image) => ImageModel(image: image, imageKey: UniqueKey()))),

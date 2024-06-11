@@ -16,10 +16,8 @@ import 'package:shopping_app/core/values/string_manager.dart';
 import 'package:shopping_app/globals.dart';
 
 class AddToCartModal extends StatelessWidget {
-  final BuildContext parentContext;
   final ProductDetailsBloc bloc;
-  const AddToCartModal(
-      {super.key, required this.bloc, required this.parentContext});
+  const AddToCartModal({super.key, required this.bloc});
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +159,7 @@ class AddToCartModal extends StatelessWidget {
             padding: EdgeInsetsDirectional.symmetric(horizontal: 31.5.r),
             onTap: () async {
               if (state.quantity < 1) {
-                showAppMaterialBanner(parentContext,
+                showAppMaterialBanner(context,
                     text: 'Quantity must not be less than 1');
                 return;
               }

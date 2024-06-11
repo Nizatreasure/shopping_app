@@ -5,6 +5,7 @@ import 'package:shopping_app/app/cart/presentation/pages/order_summary_page.dart
 import 'package:shopping_app/app/discover/presentation/pages/product_details_page.dart';
 import 'package:shopping_app/app/discover/presentation/pages/product_filter_page.dart';
 import 'package:shopping_app/app/discover/presentation/pages/product_review_page.dart';
+import 'package:shopping_app/core/common/widgets/custom_page_transition.dart';
 import 'package:shopping_app/main.dart';
 
 import '../../app/discover/presentation/pages/discover_page.dart';
@@ -19,7 +20,7 @@ class MyAppRouter {
         path: RouteNames.discover,
         name: RouteNames.discover,
         pageBuilder: (context, state) {
-          return const MaterialPage(child: DiscoverPage());
+          return CustomPageTransition(child: const DiscoverPage());
         },
         routes: [
           GoRoute(
@@ -29,7 +30,7 @@ class MyAppRouter {
               Map<String, dynamic>? data = state.extra is Map<String, dynamic>
                   ? state.extra as Map<String, dynamic>
                   : null;
-              return MaterialPage(
+              return CustomPageTransition(
                   child: data == null
                       ? const Scaffold()
                       : ProductDetailsPage(
@@ -46,7 +47,7 @@ class MyAppRouter {
                   state.extra is ProductReviewPageDataModel
                       ? state.extra as ProductReviewPageDataModel
                       : null;
-              return MaterialPage(
+              return CustomPageTransition(
                   child: data == null
                       ? const Scaffold()
                       : ProductReviewPage(data: data));
@@ -56,21 +57,21 @@ class MyAppRouter {
             path: RouteNames.productFilter,
             name: RouteNames.productFilter,
             pageBuilder: (context, state) {
-              return const MaterialPage(child: ProductFilterPage());
+              return CustomPageTransition(child: const ProductFilterPage());
             },
           ),
           GoRoute(
             path: RouteNames.cart,
             name: RouteNames.cart,
             pageBuilder: (context, state) {
-              return const MaterialPage(child: CartPage());
+              return CustomPageTransition(child: const CartPage());
             },
           ),
           GoRoute(
             path: RouteNames.orderSummary,
             name: RouteNames.orderSummary,
             pageBuilder: (context, state) {
-              return const MaterialPage(child: OrderSummaryPage());
+              return CustomPageTransition(child: const OrderSummaryPage());
             },
           ),
         ],
