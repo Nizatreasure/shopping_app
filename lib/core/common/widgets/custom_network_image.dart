@@ -7,18 +7,20 @@ class CustomNetworkImage extends StatelessWidget {
   final String imageUrl;
   final void Function()? onRetry;
   final double indicatorSize;
+  final BoxFit? fit;
   const CustomNetworkImage({
     super.key,
     required this.imageUrl,
     this.indicatorSize = 25,
     this.onRetry,
+    this.fit,
   });
 
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: imageUrl,
-      fit: BoxFit.contain,
+      fit: fit ?? BoxFit.contain,
       placeholder: (context, url) {
         return Container(
           color: ColorManager.transparent,

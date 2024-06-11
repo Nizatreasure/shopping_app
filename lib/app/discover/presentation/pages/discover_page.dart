@@ -86,6 +86,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
 
   Widget _buildBody(int tabLength, bool loadingBrands) {
     return TabBarView(
+      physics: const NeverScrollableScrollPhysics(),
       children: List.generate(tabLength, (index) {
         if (index == 0) {
           return BlocBuilder<DiscoverBloc, DiscoverState>(
@@ -107,7 +108,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
     return state.brandStatus.state == DataState.failure
         ? const SizedBox()
         : ShimmerWidget(
-            numberOfShimmerInRow: 5,
+            numberOfShimmer: 5,
             margin: EdgeInsetsDirectional.symmetric(horizontal: 30.r),
             shimmerSpacing: 10,
             borderRadius: 10,

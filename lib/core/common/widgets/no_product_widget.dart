@@ -4,9 +4,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:shopping_app/core/values/asset_manager.dart';
 import 'package:shopping_app/core/values/string_manager.dart';
 
-class NoProductWidget extends StatelessWidget {
+class AppEmptyDataWidget extends StatelessWidget {
   final String text;
-  const NoProductWidget({super.key, this.text = StringManager.noProduct});
+  final bool isReview;
+  const AppEmptyDataWidget({
+    super.key,
+    this.text = StringManager.noProduct,
+    this.isReview = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +25,7 @@ class NoProductWidget extends StatelessWidget {
           Padding(
             padding: EdgeInsetsDirectional.only(start: 25.r),
             child: SvgPicture.asset(
-              AppAssetManager.noProduct,
+              isReview ? AppAssetManager.noReview : AppAssetManager.noProduct,
               height: 100.r,
             ),
           ),

@@ -11,4 +11,10 @@ abstract class DiscoverRepository {
 
   Future<Either<DataFailure, QuerySnapshot<ProductModel>>>
       getFilteredProductList(FilterModel filter);
+
+  Future<Either<DataFailure, QuerySnapshot<ProductReviewModel>>>
+      getProductReviews(int productID, int? rating);
+
+  Future<Either<DataFailure, QuerySnapshot<ProductReviewModel>>>
+      getTopThreeReviews(int productID);
 }

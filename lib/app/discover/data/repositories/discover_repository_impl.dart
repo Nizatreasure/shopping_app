@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:shopping_app/app/discover/data/data_sources/remote_data_sources.dart';
 import 'package:shopping_app/app/discover/data/models/filter_model.dart';
+import 'package:shopping_app/app/discover/data/models/product_review_model.dart';
 import 'package:shopping_app/core/common/network/data_failure_model.dart';
 import 'package:shopping_app/core/services/network_request_service.dart';
 
@@ -44,6 +45,22 @@ class DiscoverRepositoryImpl implements DiscoverRepository {
       getFilteredProductList(FilterModel filter) {
     return _networkRequestService.makeRequest(request: () {
       return _discoverRemoteDataSource.getFilteredProductList(filter);
+    });
+  }
+
+  @override
+  Future<Either<DataFailure, QuerySnapshot<ProductReviewModel>>>
+      getProductReviews(int productID, int? rating) {
+    return _networkRequestService.makeRequest(request: () {
+      return _discoverRemoteDataSource.getProductReviews(productID, rating);
+    });
+  }
+
+  @override
+  Future<Either<DataFailure, QuerySnapshot<ProductReviewModel>>>
+      getTopThreeReviews(int productID) {
+    return _networkRequestService.makeRequest(request: () {
+      return _discoverRemoteDataSource.getTopThreeReviews(productID);
     });
   }
 }

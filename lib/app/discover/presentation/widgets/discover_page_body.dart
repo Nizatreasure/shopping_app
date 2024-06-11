@@ -64,7 +64,7 @@ class DiscoverPageBody extends StatelessWidget {
               }
             })
         : (products?.isEmpty ?? false)
-            ? const NoProductWidget()
+            ? const AppEmptyDataWidget()
             : GridView.builder(
                 key: PageStorageKey('products-${state.tabIndex}'),
                 itemCount: filter ? products?.length : null,

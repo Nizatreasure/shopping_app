@@ -13,7 +13,10 @@ class _ItemPreviewWidgetState extends State<ItemPreviewWidget> {
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
     return GestureDetector(
-      onTap: () => context.pushNamed(RouteNames.productDetails),
+      onTap: () => context.pushNamed(RouteNames.productDetails, extra: {
+        'document_id': widget.item.documentID,
+        'product_id': widget.item.id
+      }),
       child: SizedBox(
         height: 225.r,
         child: Column(

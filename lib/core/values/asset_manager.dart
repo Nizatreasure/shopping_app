@@ -28,6 +28,7 @@ class AppAssetManager {
   static const String addCircle = '$_svgPath/add-circle.svg';
   static const String error = '$_svgPath/error.svg';
   static const String noProduct = '$_svgPath/no-product.svg';
+  static const String noReview = '$_svgPath/no-review.svg';
 
   //lottie
   static const String successLottie = '$_lottiePath/success.json';

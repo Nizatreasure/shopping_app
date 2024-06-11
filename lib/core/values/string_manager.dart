@@ -52,5 +52,6 @@ class StringManager {
   static const String brown = 'Brown';
   static const String retry = 'Retry';
   static const String noProduct = 'No product';
+  static const String noReview = 'No review';
   // static const String _!dfdsf = '';
 }

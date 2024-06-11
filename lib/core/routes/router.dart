@@ -26,14 +26,30 @@ class MyAppRouter {
             path: RouteNames.productDetails,
             name: RouteNames.productDetails,
             pageBuilder: (context, state) {
-              return const MaterialPage(child: ProductDetailsPage());
+              Map<String, dynamic>? data = state.extra is Map<String, dynamic>
+                  ? state.extra as Map<String, dynamic>
+                  : null;
+              return MaterialPage(
+                  child: data == null
+                      ? const Scaffold()
+                      : ProductDetailsPage(
+                          documentID: data['document_id'],
+                          productID: data['product_id'],
+                        ));
             },
           ),
           GoRoute(
             path: RouteNames.productReview,
             name: RouteNames.productReview,
             pageBuilder: (context, state) {
-              return const MaterialPage(child: ProductReviewPage());
+              ProductReviewPageDataModel? data =
+                  state.extra is ProductReviewPageDataModel
+                      ? state.extra as ProductReviewPageDataModel
+                      : null;
+              return MaterialPage(
+                  child: data == null
+                      ? const Scaffold()
+                      : ProductReviewPage(data: data));
             },
           ),
           GoRoute(

@@ -4,7 +4,7 @@ import 'package:shimmer/shimmer.dart';
 
 class ShimmerWidget extends StatelessWidget {
   ///Width of the shimmer.
-  ///Used only when [numberOfShimmerInRow] is 1
+  ///Used only when [numberOfShimmer] is 1
   final double? width;
 
   ///Height of the shimmer
@@ -24,11 +24,15 @@ class ShimmerWidget extends StatelessWidget {
   final bool loading;
 
   ///Number of shimmers place horizontally
-  final int numberOfShimmerInRow;
+  final int numberOfShimmer;
 
   ///Number of pixels between the horizontal shimmers.
-  ///Used if [numberOfShimmerInRow] is 1
+  ///Used if [numberOfShimmer] is 1
   final double shimmerSpacing;
+
+  ///The axis to use for the multishimmer
+  ///Defauls to [Axis.horizontal]
+  final Axis axis;
 
   const ShimmerWidget({
     required this.child,
@@ -39,8 +43,10 @@ class ShimmerWidget extends StatelessWidget {
     this.borderRadius,
     this.margin,
     this.shimmerSpacing = 0,
-    this.numberOfShimmerInRow = 1,
-  });
+    this.numberOfShimmer = 1,
+    this.axis = Axis.horizontal,
+  }) : assert(axis != Axis.vertical || height != null,
+            'Height must be provided if axis is vertical');
 
   @override
   Widget build(BuildContext context) {
@@ -53,22 +59,29 @@ class ShimmerWidget extends StatelessWidget {
             highlightColor: const Color(0xffFFFFFF),
             child: Padding(
               padding: margin ?? EdgeInsets.zero,
-              child: numberOfShimmerInRow == 1
+              child: numberOfShimmer == 1
                   ? _buildShimmer()
-                  : Row(
-                      children: _multiShimmers(),
-                    ),
+                  : axis == Axis.horizontal
+                      ? Row(
+                          children: _multiShimmers(),
+                        )
+                      : Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: _multiShimmers(),
+                        ),
             ),
           );
   }
 
   List<Widget> _multiShimmers() {
     return List.generate(
-      numberOfShimmerInRow,
-      (index) => Expanded(
+      numberOfShimmer,
+      (index) => Flexible(
         child: Padding(
           padding: EdgeInsetsDirectional.symmetric(
-              horizontal: (shimmerSpacing / 2).r),
+            horizontal: axis == Axis.horizontal ? (shimmerSpacing / 2).r : 0,
+            vertical: axis == Axis.vertical ? (shimmerSpacing / 2).r : 0,
+          ),
           child: _buildShimmer(),
         ),
       ),

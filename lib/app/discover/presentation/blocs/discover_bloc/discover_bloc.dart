@@ -87,10 +87,8 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
     final dataSate = await _getProductListUsecase.execute(
         params: index == 0 ? '' : state.brands[index].name);
 
+    //if request was successful, update the state to reflect the new data
     if (dataSate.isRight) {
-      //get the brand information for the product
-
-      //if request was successful, update the state to reflect the new data
       emit(
         state.copyWith(
           productTabs: List.from(state.productTabs)

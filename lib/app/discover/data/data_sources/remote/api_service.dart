@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shopping_app/app/discover/data/models/brands_model.dart';
 import 'package:shopping_app/app/discover/data/models/filter_model.dart';
 import 'package:shopping_app/app/discover/data/models/product_model.dart';
+import 'package:shopping_app/app/discover/data/models/product_review_model.dart';
 import 'package:shopping_app/core/common/extenstions/gender_extension.dart';
 import 'package:shopping_app/core/common/extenstions/sort_by_extension.dart';
 
@@ -10,6 +11,7 @@ class DiscoverApiService {
   const DiscoverApiService(this._firestore);
 
   CollectionReference get _brandReference => _firestore.collection('brands');
+  CollectionReference get _reviewReference => _firestore.collection('reviews');
   CollectionReference get _productReference =>
       _firestore.collection('products');
 
@@ -48,6 +50,8 @@ class DiscoverApiService {
         .get();
   }
 
+  //get a list of products according to the selected filters
+  //and sortby options
   Future<QuerySnapshot<ProductModel>> getFilteredProductList(
       FilterModel filter) async {
     Query query = _productReference;
@@ -80,6 +84,32 @@ class DiscoverApiService {
     return query
         .withConverter<ProductModel>(
             fromFirestore: (snapshot, _) => ProductModel.fromJson(snapshot),
+            toFirestore: (model, _) => model.toJson())
+        .get();
+  }
+
+  Future<QuerySnapshot<ProductReviewModel>> getProductReviews(
+      int productID, int? rating) async {
+    return _reviewReference
+        .where('product_id', isEqualTo: productID)
+        .where('rating', isEqualTo: rating)
+        .orderBy('created_at', descending: true)
+        .withConverter<ProductReviewModel>(
+            fromFirestore: (snapshot, _) =>
+                ProductReviewModel.fromJson(snapshot),
+            toFirestore: (model, _) => model.toJson())
+        .get();
+  }
+
+  Future<QuerySnapshot<ProductReviewModel>> getTopThreeReviews(int productID) {
+    return _reviewReference
+        .where('product_id', isEqualTo: productID)
+        .orderBy('rating', descending: true)
+        .limit(3)
+        .orderBy('created_at', descending: true)
+        .withConverter<ProductReviewModel>(
+            fromFirestore: (snapshot, _) =>
+                ProductReviewModel.fromJson(snapshot),
             toFirestore: (model, _) => model.toJson())
         .get();
   }
