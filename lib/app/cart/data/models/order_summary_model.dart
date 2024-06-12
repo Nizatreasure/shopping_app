@@ -46,7 +46,7 @@ class OrderSummaryModel {
     );
   }
 
-  factory OrderSummaryModel.fromJson(DocumentSnapshot doc) {
+  factory OrderSummaryModel.fromSnapshot(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return OrderSummaryModel(
       orderID: ((data['order_id'] ?? 0) as num).toInt(),

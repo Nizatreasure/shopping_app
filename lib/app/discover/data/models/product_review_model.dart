@@ -24,7 +24,7 @@ class ProductReviewModel {
     required this.imageKey,
   });
 
-  factory ProductReviewModel.fromJson(DocumentSnapshot doc) {
+  factory ProductReviewModel.fromSnapshot(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return ProductReviewModel(
       createdAt: (data['created_at'] as Timestamp? ?? Timestamp.now()).toDate(),

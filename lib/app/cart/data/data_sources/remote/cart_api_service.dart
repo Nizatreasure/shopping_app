@@ -8,9 +8,9 @@ class CartApiService {
 
   CollectionReference get _cartReference => _firestore.collection('cart');
   DocumentReference get _cartCounterReference =>
-      _firestore.collection('counters').doc('cart');
+      _firestore.doc('counters/cart');
   DocumentReference get _orderHistoryCounterReference =>
-      _firestore.collection('counters').doc('order_history');
+      _firestore.doc('counters/order_history');
   CollectionReference get _historyRerence =>
       _firestore.collection('order_history');
 
@@ -28,13 +28,13 @@ class CartApiService {
       int newCartItemId = currentMaxId + 1;
 
       // Update the counter document with the new max ID
-      transaction.update(_cartCounterReference, {'cart_max_id': newCartItemId});
+      transaction.set(_cartCounterReference, {'cart_max_id': newCartItemId});
 
       CartModel cartItem = cartModel.copyWith(id: newCartItemId);
 
       await _cartReference
           .withConverter<CartModel>(
-              fromFirestore: (snapshot, _) => CartModel.fromJson(snapshot),
+              fromFirestore: (snapshot, _) => CartModel.fromSnapshot(snapshot),
               toFirestore: (cart, _) => cart.toJson())
           .add(cartItem);
     });
@@ -49,7 +49,7 @@ class CartApiService {
         .snapshots()
         .map((snapshot) {
       return snapshot.docChanges.map((doc) {
-        return CartDocumentChangedModel.fromJson(doc);
+        return CartDocumentChangedModel.fromSnapshot(doc);
       }).toList();
     });
   }
@@ -81,7 +81,7 @@ class CartApiService {
       int newOrderID = currentMaxId + 1;
 
       // Update the counter document with the new max ID
-      transaction.update(
+      transaction.set(
           _orderHistoryCounterReference, {'order_history_count': newOrderID});
 
       OrderSummaryModel orderItem = order.copyWith(orderID: newOrderID);
@@ -89,7 +89,7 @@ class CartApiService {
       await _historyRerence
           .withConverter<OrderSummaryModel>(
               fromFirestore: (snapshot, _) =>
-                  OrderSummaryModel.fromJson(snapshot),
+                  OrderSummaryModel.fromSnapshot(snapshot),
               toFirestore: (order, _) => order.toJson())
           .add(orderItem);
 

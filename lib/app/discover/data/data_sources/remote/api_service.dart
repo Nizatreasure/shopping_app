@@ -30,11 +30,14 @@ class DiscoverApiService {
   //default order in the app is to sort by highest price
   //no limit was set (no pagination) because the products in the
   //database is very small
-  Future<QuerySnapshot<ProductModel>> getProductList(String name) async {
-    return _productReference
-        .where('brand', isEqualTo: name.isEmpty ? null : name)
+  Future<QuerySnapshot<ProductModel>> getProductList(String brandName) async {
+    Query query = _productReference;
+    if (brandName.isNotEmpty) {
+      query = query.where('brand', isEqualTo: brandName);
+    }
+    return query
         .withConverter<ProductModel>(
-            fromFirestore: (snapshot, _) => ProductModel.fromJson(snapshot),
+            fromFirestore: (snapshot, _) => ProductModel.fromSnapshot(snapshot),
             toFirestore: (model, _) => model.toJson())
         .get();
   }
@@ -45,7 +48,7 @@ class DiscoverApiService {
     return _productReference
         .doc(docID)
         .withConverter<ProductModel>(
-            fromFirestore: (snapshot, _) => ProductModel.fromJson(snapshot),
+            fromFirestore: (snapshot, _) => ProductModel.fromSnapshot(snapshot),
             toFirestore: (model, _) => model.toJson())
         .get();
   }
@@ -59,21 +62,22 @@ class DiscoverApiService {
     if (filter.priceRange != null) {
       query = query
           .where('price.amount',
-              isGreaterThanOrEqualTo: filter.priceRange?.minPrice)
+              isGreaterThanOrEqualTo: filter.priceRange!.minPrice)
           .where('price.amount',
-              isLessThanOrEqualTo: filter.priceRange?.maxPrice);
+              isLessThanOrEqualTo: filter.priceRange!.maxPrice);
     }
 
     if (filter.color != null) {
-      query = query.where('colors', arrayContains: filter.color?.toJson());
+      query = query.where('colors', arrayContains: filter.color!.toJson());
+      ;
     }
 
     if (filter.brand != null) {
-      query = query.where('brand', isEqualTo: filter.brand?.name);
+      query = query.where('brand', isEqualTo: filter.brand!.name);
     }
 
     if (filter.gender != null) {
-      query = query.where('gender', isEqualTo: filter.gender?.displayName);
+      query = query.where('gender', isEqualTo: filter.gender!.displayName);
     }
 
     if (filter.sortBy != null) {
@@ -83,20 +87,22 @@ class DiscoverApiService {
 
     return query
         .withConverter<ProductModel>(
-            fromFirestore: (snapshot, _) => ProductModel.fromJson(snapshot),
+            fromFirestore: (snapshot, _) => ProductModel.fromSnapshot(snapshot),
             toFirestore: (model, _) => model.toJson())
         .get();
   }
 
   Future<QuerySnapshot<ProductReviewModel>> getProductReviews(
       int productID, int? rating) async {
-    return _reviewReference
-        .where('product_id', isEqualTo: productID)
-        .where('rating', isEqualTo: rating)
+    Query query = _reviewReference.where('product_id', isEqualTo: productID);
+    if (rating != null) {
+      query = query.where('rating', isEqualTo: rating);
+    }
+    return query
         .orderBy('created_at', descending: true)
         .withConverter<ProductReviewModel>(
             fromFirestore: (snapshot, _) =>
-                ProductReviewModel.fromJson(snapshot),
+                ProductReviewModel.fromSnapshot(snapshot),
             toFirestore: (model, _) => model.toJson())
         .get();
   }
@@ -106,10 +112,9 @@ class DiscoverApiService {
         .where('product_id', isEqualTo: productID)
         .orderBy('rating', descending: true)
         .limit(3)
-        .orderBy('created_at', descending: true)
         .withConverter<ProductReviewModel>(
             fromFirestore: (snapshot, _) =>
-                ProductReviewModel.fromJson(snapshot),
+                ProductReviewModel.fromSnapshot(snapshot),
             toFirestore: (model, _) => model.toJson())
         .get();
   }

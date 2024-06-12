@@ -33,7 +33,7 @@ class ProductModel {
     required this.colors,
   });
 
-  factory ProductModel.fromJson(DocumentSnapshot doc) {
+  factory ProductModel.fromSnapshot(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     //sorting the product sizes from smallest to biggest
     List<num> productSizes =

@@ -68,7 +68,7 @@ class CartModel {
     );
   }
 
-  factory CartModel.fromJson(DocumentSnapshot doc) {
+  factory CartModel.fromSnapshot(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return CartModel(
       id: ((data['id'] ?? 0) as num).toInt(),
@@ -84,6 +84,26 @@ class CartModel {
       imageUrl: data['image_url'] ?? '',
       productID: ((data['product_id'] ?? 0) as num).toInt(),
       productDocumentID: data['product_document_id'] ?? '',
+      imageKey: UniqueKey(),
+      itemKey: GlobalKey(),
+    );
+  }
+
+  factory CartModel.fromJson(Map<String, dynamic> json) {
+    return CartModel(
+      id: ((json['id'] ?? 0) as num).toInt(),
+      createdAt:
+          ((json['created_at'] ?? Timestamp.now()) as Timestamp).toDate(),
+      docID: '',
+      productName: json['product_name'] ?? '',
+      brandName: json['brand_name'] ?? '',
+      color: ColorModel.fromJson(json['color'] ?? {}),
+      size: json['size'] ?? 0,
+      price: PriceModel.fromJson(json['price'] ?? {}),
+      quantity: ((json['quantity'] ?? 0) as num).toInt(),
+      imageUrl: json['image_url'] ?? '',
+      productID: ((json['product_id'] ?? 0) as num).toInt(),
+      productDocumentID: json['product_document_id'] ?? '',
       imageKey: UniqueKey(),
       itemKey: GlobalKey(),
     );
@@ -154,9 +174,9 @@ class CartDocumentChangedModel {
       required this.oldIndex,
       required this.newIndex});
 
-  factory CartDocumentChangedModel.fromJson(DocumentChange doc) {
+  factory CartDocumentChangedModel.fromSnapshot(DocumentChange doc) {
     return CartDocumentChangedModel(
-      cartModel: CartModel.fromJson(doc.doc),
+      cartModel: CartModel.fromSnapshot(doc.doc),
       type: doc.type,
       oldIndex: doc.oldIndex,
       newIndex: doc.newIndex,
