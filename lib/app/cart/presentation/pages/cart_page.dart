@@ -83,7 +83,7 @@ class _CartPageState extends State<CartPage> {
                             child: AnimatedList(
                               padding: EdgeInsetsDirectional.symmetric(
                                   vertical: 20.r),
-                              key: context.read<CartBloc>().carListKey,
+                              key: context.read<CartBloc>().cartListKey,
                               initialItemCount: state.cartItemsCount,
                               itemBuilder: (context, index, animation) {
                                 return CartItemWidget(

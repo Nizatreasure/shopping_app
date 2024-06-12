@@ -1,7 +1,7 @@
 part of 'cart_bloc.dart';
 
 @immutable
-class CartState {
+class CartState extends Equatable {
   final List<CartModel>? cartItems;
   final DataStatus cartStatus;
   final DataStatus paymentStatus;
@@ -52,4 +52,7 @@ class CartState {
       paymentStatus: paymentStatus ?? this.paymentStatus,
     );
   }
+
+  @override
+  List<Object?> get props => [cartItems, cartStatus.state, paymentStatus.state];
 }

@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/app/discover/data/models/product_model.dart';
 
-class CartModel {
+class CartModel extends Equatable {
   final int id;
   final String docID;
   final String productName;
@@ -23,7 +24,7 @@ class CartModel {
 
   double get totalPrice => price.amount * quantity;
 
-  CartModel({
+  const CartModel({
     required this.id,
     required this.docID,
     required this.productName,
@@ -161,6 +162,23 @@ class CartModel {
       itemKey: itemKey ?? this.itemKey,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        docID,
+        productName,
+        brandName,
+        color,
+        size,
+        price,
+        quantity,
+        imageUrl,
+        productID,
+        productDocumentID,
+        createdAt,
+        loading,
+      ];
 }
 
 class CartDocumentChangedModel {

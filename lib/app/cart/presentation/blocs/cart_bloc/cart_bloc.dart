@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/app/cart/data/models/cart_model.dart';
@@ -23,9 +24,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   final DeleteProductFromCartUsecase _deleteProductFromCartUsecase;
   final MakePaymentForCartUsecase _makePaymentForCartUsecase;
 
-  final GlobalKey<AnimatedListState> _carListKey =
+  final GlobalKey<AnimatedListState> _cartListKey =
       GlobalKey<AnimatedListState>();
-  GlobalKey<AnimatedListState> get carListKey => _carListKey;
+  GlobalKey<AnimatedListState> get cartListKey => _cartListKey;
   CartBloc(this._getCartItemsUsecase, this._updateCartItemUsecase,
       this._deleteProductFromCartUsecase, this._makePaymentForCartUsecase)
       : super(const CartState()) {
@@ -42,7 +43,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     final dataState = await _getCartItemsUsecase.execute(params: null);
     if (dataState.isRight) {
-      emit(state.copyWith(cartStatus: DataStatus.success()));
+      emit(state.copyWith(cartStatus: DataStatus.success(), cartItems: []));
       _cartItemSubscription = dataState.right.listen((cartItems) {
         for (CartDocumentChangedModel item in cartItems) {
           add(CartUpdateCartItemsEvent(item));
@@ -62,7 +63,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     if (item.type == DocumentChangeType.added) {
       emit(state.copyWith(
           cartItems: cartStateItems..insert(item.newIndex, item.cartModel)));
-      _carListKey.currentState?.insertItem(item.newIndex);
+      _cartListKey.currentState?.insertItem(item.newIndex);
       //insert item into the animated listview
     }
 
@@ -78,7 +79,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     //document was deleted and should be removed from the UI
     else {
-      _carListKey.currentState?.removeItem(
+      _cartListKey.currentState?.removeItem(
         item.oldIndex,
         (context, animation) => CartItemWidget(
           loading: false,

@@ -13,6 +13,8 @@ class AppLoaderWidget {
   static BuildContext? _context;
 
   static showLoader({String? message}) async {
+    BuildContext? appContext = MyApp.navigatorKey.currentContext;
+    if (appContext == null) return;
     if (_context?.mounted ?? false) {
       dismissLoader();
     }
@@ -20,11 +22,8 @@ class AppLoaderWidget {
     showDialog(
       barrierDismissible: false,
       useRootNavigator: true,
-      // barrierColor: Theme.of(MyApp.navigatorKey.currentContext!)
-      //     .bottomSheetTheme
-      //     .modalBarrierColor,
       barrierColor: ColorManager.white.withOpacity(0.5),
-      context: MyApp.navigatorKey.currentContext!,
+      context: appContext,
       builder: (pageContext) {
         _context = pageContext;
         return PopScope(
@@ -55,9 +54,7 @@ class AppLoaderWidget {
                       Text(
                         message ??
                             '${StringManager.processing}... ${StringManager.pleaseWait}...',
-                        style: Theme.of(MyApp.navigatorKey.currentContext!)
-                            .textTheme
-                            .headlineMedium!,
+                        style: Theme.of(pageContext).textTheme.headlineMedium!,
                       )
                     ],
                   ),
@@ -72,7 +69,7 @@ class AppLoaderWidget {
 
   static dismissLoader() async {
     if (_context != null) {
-      _context!.pop();
+      _context?.pop();
       _context = null;
     }
   }
