@@ -11,6 +11,8 @@ class ProductDetailsState {
   final DataStatus reviewStatus;
   final int quantity;
   final String? cartDocumentID;
+  //tracks the action of adding a product to cart
+  final DataStatus addToCartStatus;
 
   double get totalPrice => (productDetails?.price.amount ?? 0) * quantity;
 
@@ -29,6 +31,7 @@ class ProductDetailsState {
     this.productReviews,
     this.productStatus = const DataStatus(state: DataState.initial),
     this.reviewStatus = const DataStatus(state: DataState.initial),
+    this.addToCartStatus = const DataStatus(state: DataState.initial),
     this.selectedColor,
     this.selectedSize,
     this.imageIndex = 0,
@@ -44,6 +47,7 @@ class ProductDetailsState {
     int? imageIndex,
     List<ProductReviewModel>? productReviews,
     DataStatus? reviewStatus,
+    DataStatus? addToCartStatus,
     int? quantity,
     String? cartDocumentID,
   }) {
@@ -57,6 +61,7 @@ class ProductDetailsState {
       reviewStatus: reviewStatus ?? this.reviewStatus,
       quantity: quantity ?? this.quantity,
       cartDocumentID: cartDocumentID ?? this.cartDocumentID,
+      addToCartStatus: addToCartStatus ?? this.addToCartStatus,
     );
   }
 }

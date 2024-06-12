@@ -55,7 +55,21 @@ class ProductDetailsPage extends StatelessWidget {
           actions: [const CartWidget()],
         ),
         body: Builder(builder: (context) {
-          return BlocBuilder<ProductDetailsBloc, ProductDetailsState>(
+          return BlocConsumer<ProductDetailsBloc, ProductDetailsState>(
+              listenWhen: (previous, current) =>
+                  previous.addToCartStatus.state !=
+                  current.addToCartStatus.state,
+              listener: (context, state) {
+                if (state.addToCartStatus.state == DataState.failure) {
+                  showAppMaterialBanner(context,
+                      text: StringManager.failedToAddToCart);
+                } else if (state.addToCartStatus.state == DataState.success) {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => const AddedToCartModal(),
+                  );
+                }
+              },
               buildWhen: (previous, current) =>
                   previous.productStatus.state != current.productStatus.state ||
                   previous.reviewStatus.state != current.reviewStatus.state,
@@ -86,22 +100,25 @@ class ProductDetailsPage extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-          child: SingleChildScrollView(
-            padding: EdgeInsetsDirectional.fromSTEB(30.r, 10.r, 30.r,
-                MediaQuery.of(context).viewPadding.bottom + 30.r),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const ProductDetailsImageDisplayWidget(),
-                SizedBox(height: 30.r),
-                _buildProductNameAndRating(themeData),
-                SizedBox(height: 30.r),
-                const ProductDetailsSizeWidget(),
-                SizedBox(height: 30.r),
-                _buildProductDescription(themeData),
-                SizedBox(height: 30.r),
-                _buildReviews(context, themeData),
-              ],
+          child: IgnorePointer(
+            ignoring: context.watch<ProductDetailsBloc>().state.loading,
+            child: SingleChildScrollView(
+              padding: EdgeInsetsDirectional.fromSTEB(30.r, 10.r, 30.r,
+                  MediaQuery.of(context).viewPadding.bottom + 30.r),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const ProductDetailsImageDisplayWidget(),
+                  SizedBox(height: 30.r),
+                  _buildProductNameAndRating(themeData),
+                  SizedBox(height: 30.r),
+                  const ProductDetailsSizeWidget(),
+                  SizedBox(height: 30.r),
+                  _buildProductDescription(themeData),
+                  SizedBox(height: 30.r),
+                  _buildReviews(context, themeData),
+                ],
+              ),
             ),
           ),
         ),
@@ -148,17 +165,19 @@ class ProductDetailsPage extends StatelessWidget {
                       onTap: () async {
                         if (state.selectedColor == null) {
                           showAppMaterialBanner(context,
-                              text: 'Please select a product color');
+                              text: StringManager.selectProductColor);
                           return;
                         }
                         if (state.selectedSize == null) {
                           showAppMaterialBanner(context,
-                              text: 'Please select a product size');
+                              text: StringManager.selectProductSize);
                           return;
                         }
                         bool success = await addToCart(context);
                         if (success && context.mounted) {
-                          addedToCart(context);
+                          context
+                              .read<ProductDetailsBloc>()
+                              .add(const ProductDetailsAddProductToCartEvent());
                         }
                       },
                     )
@@ -412,23 +431,5 @@ class ProductDetailsPage extends StatelessWidget {
       },
     );
     return successful == true;
-  }
-
-  void addedToCart(BuildContext context) async {
-    //using a completer so to wait while the bloc executes
-    //the transaction
-    //a boolean complete is used to listen if the operation was
-    //successful or not
-    Completer<bool> completer = Completer<bool>();
-    context
-        .read<ProductDetailsBloc>()
-        .add(ProductDetailsAddProductToCartEvent(completer));
-    bool success = await completer.future;
-    if (success && context.mounted) {
-      showModalBottomSheet(
-          context: context, builder: (context) => const AddedToCartModal());
-    } else if (context.mounted) {
-      showAppMaterialBanner(context, text: 'Failed to add product to cart');
-    }
   }
 }

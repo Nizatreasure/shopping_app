@@ -32,4 +32,5 @@ class AppAssetManager {
 
   //lottie
   static const String successLottie = '$_lottiePath/success.json';
+  static const String loadingLottie = '$_lottiePath/loading.json';
 }

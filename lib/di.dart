@@ -67,6 +67,8 @@ Future<void> initializeDependencies() async {
       .registerSingleton<UpdateCartItemUsecase>(UpdateCartItemUsecase(getIt()));
   getIt.registerSingleton<DeleteProductFromCartUsecase>(
       DeleteProductFromCartUsecase(getIt()));
+  getIt.registerSingleton<MakePaymentForCartUsecase>(
+      MakePaymentForCartUsecase(getIt()));
 
   //blocs
   getIt.registerFactory<DiscoverBloc>(
@@ -75,7 +77,8 @@ Future<void> initializeDependencies() async {
       () => ProductDetailsBloc(getIt(), getIt(), getIt(), getIt()));
   getIt.registerFactory<ProductReviewBloc>(
       () => ProductReviewBloc(_reviewTabs.reversed.toList(), getIt()));
-  getIt.registerFactory<CartBloc>(() => CartBloc(getIt(), getIt(), getIt()));
+  getIt.registerFactory<CartBloc>(
+      () => CartBloc(getIt(), getIt(), getIt(), getIt()));
 }
 
 //

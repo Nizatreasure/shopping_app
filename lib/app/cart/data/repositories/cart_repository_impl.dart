@@ -1,6 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:shopping_app/app/cart/data/data_sources/cart_remote_data_sources.dart';
 import 'package:shopping_app/app/cart/data/models/cart_model.dart';
+import 'package:shopping_app/app/cart/data/models/order_summary_model.dart';
 import 'package:shopping_app/core/common/network/data_failure_model.dart';
 import 'package:shopping_app/core/services/network_request_service.dart';
 
@@ -20,7 +21,8 @@ class CartRepositoryImpl implements CartRepository {
   }
 
   @override
-  Future<Either<DataFailure, Stream<List<CartModel>>>> getCartItems() {
+  Future<Either<DataFailure, Stream<List<CartDocumentChangedModel>>>>
+      getCartItems() {
     return _networkRequestService.makeRequest(request: () {
       return _cartRemoteDataSources.getCartItems();
     });
@@ -40,6 +42,14 @@ class CartRepositoryImpl implements CartRepository {
       String cartDocumentID) {
     return _networkRequestService.makeRequest(request: () {
       return _cartRemoteDataSources.deleteProductFromCart(cartDocumentID);
+    });
+  }
+
+  @override
+  Future<Either<DataFailure, void>> makePaymentForCart(
+      OrderSummaryModel order) {
+    return _networkRequestService.makeRequest(request: () {
+      return _cartRemoteDataSources.makePaymentForCart(order);
     });
   }
 }

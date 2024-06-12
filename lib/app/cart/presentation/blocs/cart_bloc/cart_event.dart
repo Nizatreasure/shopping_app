@@ -9,8 +9,8 @@ class CartGetCartItemsEvent extends CartEvent {
 }
 
 class CartUpdateCartItemsEvent extends CartEvent {
-  final List<CartModel> items;
-  const CartUpdateCartItemsEvent(this.items);
+  final CartDocumentChangedModel item;
+  const CartUpdateCartItemsEvent(this.item);
 }
 
 class CartUpdateQuantityEvent extends CartEvent {
@@ -23,4 +23,8 @@ class CartDeleteProductEvent extends CartEvent {
   final CartModel item;
   final Completer<bool> completer;
   const CartDeleteProductEvent(this.item, this.completer);
+}
+
+class CartMakePaymentEvent extends CartEvent {
+  const CartMakePaymentEvent();
 }

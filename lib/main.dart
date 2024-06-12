@@ -88,7 +88,22 @@ class _MyAppState extends State<MyApp> {
   }
 
   getData() async {
-    // final data = await getIt<CartRepository>().getCartItems();
+    final data = await getIt<CartRepository>().addProductToCart(CartModel(
+      id: 50,
+      docID: 'docID',
+      productName: 'productName',
+      brandName: brandName,
+      color: ColorModel(color: Colors.white, name: 'White'),
+      size: 40,
+      price: PriceModel(amount: 100, currency: 'USD', symbol: r'$'),
+      quantity: 2,
+      itemKey: GlobalKey(),
+      imageUrl: 'imageUrl',
+      productID: 1,
+      productDocumentID: 'productDocumentID',
+      imageKey: UniqueKey(),
+      createdAt: DateTime.now(),
+    ));
     // if (data.isRight) {
     //   data.right.listen((data) {
     //     print('name of brand is this ${data.first.brandName}');

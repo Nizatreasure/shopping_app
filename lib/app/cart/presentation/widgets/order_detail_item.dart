@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shopping_app/app/cart/data/models/cart_model.dart';
 import 'package:shopping_app/core/values/color_manager.dart';
+import 'package:shopping_app/core/values/string_manager.dart';
 import 'package:shopping_app/globals.dart';
 
 class OrderDetailItem extends StatelessWidget {
-  const OrderDetailItem({super.key});
+  final CartModel cartItem;
+  const OrderDetailItem({super.key, required this.cartItem});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,7 @@ class OrderDetailItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Jordan 1 Retro High Tie Dye',
+            cartItem.productName,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: themeData.textTheme.titleLarge!.copyWith(
@@ -29,7 +32,7 @@ class OrderDetailItem extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Nike . Red Grey . 40 . Qty 1',
+                  '${cartItem.brandName} . ${cartItem.color.name} . ${cartItem.size} . ${StringManager.qty} ${cartItem.quantity}',
                   style: themeData.textTheme.bodyMedium!.copyWith(
                     fontSize: 14,
                     height: 24 / 14,
@@ -38,7 +41,7 @@ class OrderDetailItem extends StatelessWidget {
                 ),
               ),
               Text(
-                Globals.amountFormat.format(235),
+                '${cartItem.price.symbol}${Globals.amountFormat.format(cartItem.totalPrice)}',
                 style: themeData.textTheme.titleMedium!.copyWith(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,

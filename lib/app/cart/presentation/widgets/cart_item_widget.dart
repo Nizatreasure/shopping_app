@@ -3,7 +3,14 @@ part of '../pages/cart_page.dart';
 class CartItemWidget extends StatefulWidget {
   final CartModel? cartModel;
   final bool loading;
-  const CartItemWidget({super.key, this.cartModel, required this.loading});
+  final Animation<double>? animation;
+
+  const CartItemWidget({
+    super.key,
+    this.cartModel,
+    required this.loading,
+    required this.animation,
+  });
 
   @override
   State<CartItemWidget> createState() => _CartItemWidgetState();
@@ -28,6 +35,18 @@ class _CartItemWidgetState extends State<CartItemWidget>
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    return widget.animation == null
+        ? _buildBody(themeData)
+        : SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(-1.0, 0.0),
+              end: const Offset(0.0, 0.0),
+            ).animate(widget.animation!),
+            child: _buildBody(themeData),
+          );
+  }
+
+  Widget _buildBody(ThemeData themeData) {
     return LayoutBuilder(builder: (context, constraint) {
       return Padding(
         padding: EdgeInsetsDirectional.only(bottom: 30.r),

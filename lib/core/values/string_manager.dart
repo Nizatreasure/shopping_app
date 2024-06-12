@@ -59,6 +59,16 @@ class StringManager {
       'Are you sure you want to remove this product from your cart?';
   static const String no = 'No';
   static const String yes = 'Yes';
+  static const String done = 'Done';
+  static const String processing = 'Processing';
+  static const String pleaseWait = 'Please wait';
+  static const String paymentSuccessful = 'Payment successful';
+  static const String addingToCart = 'Adding to cart';
+  static const String selectProductColor = 'Please select a product color';
+  static const String selectProductSize = 'Please select a product size';
+  static const String failedToAddToCart = 'Failed to add product to cart';
   static const String removeFromCartFailed =
       'Failed to remove product from cart';
+  static const String paymentSuccessfulMessage =
+      'Your payment was successful and your order is currently being processed.';
 }

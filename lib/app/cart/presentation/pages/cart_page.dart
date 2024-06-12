@@ -7,8 +7,10 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shopping_app/app/cart/data/models/cart_model.dart';
+import 'package:shopping_app/app/cart/data/repositories/cart_repository_impl.dart';
 import 'package:shopping_app/app/cart/presentation/blocs/cart_bloc/cart_bloc.dart';
 import 'package:shopping_app/app/cart/presentation/widgets/delete_confirmation_widget.dart';
+import 'package:shopping_app/app/discover/data/models/product_model.dart';
 import 'package:shopping_app/app/discover/presentation/widgets/shimmer_widget.dart';
 import 'package:shopping_app/core/common/enums/enums.dart';
 import 'package:shopping_app/core/common/widgets/app_button_widget.dart';
@@ -23,12 +25,30 @@ import 'package:shopping_app/core/routes/router.dart';
 import 'package:shopping_app/core/values/asset_manager.dart';
 import 'package:shopping_app/core/values/color_manager.dart';
 import 'package:shopping_app/core/values/string_manager.dart';
+import 'package:shopping_app/di.dart';
 import 'package:shopping_app/globals.dart';
 
 part '../widgets/cart_item_widget.dart';
 
-class CartPage extends StatelessWidget {
+class CartPage extends StatefulWidget {
   const CartPage({super.key});
+
+  @override
+  State<CartPage> createState() => _CartPageState();
+}
+
+class _CartPageState extends State<CartPage> {
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  late List<CartModel> _items;
+  @override
+  void initState() {
+    CartBloc bloc = context.read<CartBloc>();
+    if (bloc.state.loadingError) {
+      bloc.add(const CartGetCartItemsEvent());
+    }
+    _items = [];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,28 +59,42 @@ class CartPage extends StatelessWidget {
       body: BlocBuilder<CartBloc, CartState>(builder: (context, state) {
         return state.loadingError
             ? AppErrorWidget(
-                errorMessage: state.status.exception!.message,
+                errorMessage: state.cartStatus.exception!.message,
                 onTap: () {
                   context.read<CartBloc>().add(const CartGetCartItemsEvent());
                 },
               )
             : state.cartItems?.isEmpty ?? false
                 ? const AppEmptyDataWidget(text: StringManager.noProductInCart)
-                : IgnorePointer(
-                    ignoring: state.loading,
-                    child: Column(
+                : Builder(builder: (context) {
+                    if (state.loading) {
+                      //Used to show the shimmer effect when loading because
+                      //AnimatedList cannot be use
+                      return IgnorePointer(
+                        child: ListView.builder(
+                            padding: EdgeInsetsDirectional.only(
+                              top: 20.r,
+                            ),
+                            itemBuilder: (context, index) {
+                              return const CartItemWidget(
+                                  loading: true, animation: null);
+                            }),
+                      );
+                    }
+                    return Column(
                       children: [
                         Expanded(
                           child: SlidableAutoCloseBehavior(
                             closeWhenTapped: false,
-                            child: ListView.builder(
-                              padding: EdgeInsetsDirectional.only(
-                                top: 20.r,
-                                bottom: 20.r,
-                              ),
-                              itemCount: state.cartItems?.length,
-                              itemBuilder: (context, index) {
+                            child: AnimatedList(
+                              padding: EdgeInsetsDirectional.symmetric(
+                                  vertical: 20.r),
+                              key: context.read<CartBloc>().carListKey,
+                              initialItemCount: state.cartItemsCount,
+                              itemBuilder: (context, index, animation) {
                                 return CartItemWidget(
+                                  animation: animation,
+                                  key: state.cartItems?[index].itemKey,
                                   loading: state.loading,
                                   cartModel: state.cartItems?[index],
                                 );
@@ -71,15 +105,15 @@ class CartPage extends StatelessWidget {
                         _buildBottomPageWidget(
                             context, themeData, bottomPadding, state),
                       ],
-                    ),
-                  );
+                    );
+                  });
       }),
     );
   }
 
   Widget _buildBottomPageWidget(BuildContext context, ThemeData themeData,
       double bottomPadding, CartState state) {
-    return state.status.state == DataState.success
+    return state.cartStatus.state == DataState.success
         ? Container(
             height: 90.r + bottomPadding,
             decoration: BoxDecoration(
@@ -112,7 +146,7 @@ class CartPage extends StatelessWidget {
                               color: ColorManager.primaryLight300),
                         ),
                         Text(
-                          '${state.currencySymbol}${Globals.amountFormat.format(state.grandTotal)}',
+                          '${state.currencySymbol}${Globals.amountFormat.format(state.subTotal)}',
                           style: themeData.textTheme.headlineMedium!.copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
@@ -127,8 +161,26 @@ class CartPage extends StatelessWidget {
                     shrinkToFitChildSize: true,
                     padding:
                         EdgeInsetsDirectional.symmetric(horizontal: 31.5.r),
-                    onTap: () {
-                      context.pushNamed(RouteNames.orderSummary);
+                    onTap: () async {
+                      // context.pushNamed(RouteNames.orderSummary);
+                      final data = await getIt<CartRepository>()
+                          .addProductToCart(CartModel(
+                        itemKey: GlobalKey(),
+                        id: 50,
+                        docID: 'docID',
+                        productName: 'productName',
+                        brandName: 'brandName',
+                        color: ColorModel(color: Colors.white, name: 'White'),
+                        size: 40,
+                        price: PriceModel(
+                            amount: 100, currency: 'USD', symbol: r'$'),
+                        quantity: 2,
+                        imageUrl: 'imageUrl',
+                        productID: 1,
+                        productDocumentID: 'productDocumentID',
+                        imageKey: UniqueKey(),
+                        createdAt: DateTime.now(),
+                      ));
                     },
                   )
                 ],

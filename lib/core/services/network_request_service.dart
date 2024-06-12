@@ -10,9 +10,14 @@ class NetworkRequestService {
   final ConnectionChecker _connectionChecker;
   NetworkRequestService(this._connectionChecker);
 
+  Future<void> dad() async {}
+
   Future<Either<DataFailure, Output>> makeRequest<Output>(
       {required FutureOr<Output> Function() request}) async {
     if (await _connectionChecker.isConnected) {
+      print('internet is connected');
+      await Future.delayed(const Duration(milliseconds: 100));
+      print('internet is making request now');
       try {
         final response = await request();
         bool exists = true;
@@ -30,6 +35,8 @@ class NetworkRequestService {
         return Left(DataFailure());
       }
     } else {
+      print('internet is not connected');
+      await Future.delayed(const Duration(milliseconds: 400));
       return Left(
           DataFailure(message: 'Please check your internet connection'));
     }

@@ -1,29 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shopping_app/app/cart/data/models/cart_model.dart';
+import 'package:shopping_app/app/cart/data/models/order_summary_model.dart';
 
 class CartApiService {
   final FirebaseFirestore _firestore;
   const CartApiService(this._firestore);
 
   CollectionReference get _cartReference => _firestore.collection('cart');
-  DocumentReference get _counterReference =>
+  DocumentReference get _cartCounterReference =>
       _firestore.collection('counters').doc('cart');
+  DocumentReference get _orderHistoryCounterReference =>
+      _firestore.collection('counters').doc('order_history');
+  CollectionReference get _historyRerence =>
+      _firestore.collection('order_history');
 
   Future<void> addProductToCart(CartModel cartModel) async {
     await _firestore.runTransaction((transaction) async {
       //Get the current maximum assigned ID from the database
-      DocumentSnapshot counterSnapshot =
-          await transaction.get(_counterReference);
+      DocumentSnapshot cartCounterSnapshot =
+          await transaction.get(_cartCounterReference);
 
-      int currentMaxId =
-          (counterSnapshot.data() as Map<String, dynamic>?)?['cart_max_id'] ??
-              0;
+      int currentMaxId = (cartCounterSnapshot.data()
+              as Map<String, dynamic>?)?['cart_max_id'] ??
+          0;
 
       //Increment the current max ID
       int newCartItemId = currentMaxId + 1;
 
       // Update the counter document with the new max ID
-      transaction.update(_counterReference, {'cart_max_id': newCartItemId});
+      transaction.update(_cartCounterReference, {'cart_max_id': newCartItemId});
 
       CartModel cartItem = cartModel.copyWith(id: newCartItemId);
 
@@ -37,9 +42,15 @@ class CartApiService {
 
   //Using firebase stream so that the cart would be up-to-date with
   //the latest information once a change occurs in the collection
-  Stream<List<CartModel>> getCartItems() {
-    return _cartReference.snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) => CartModel.fromJson(doc)).toList();
+  Stream<List<CartDocumentChangedModel>> getCartItems() {
+    //order the cart items to display the latest additions first
+    return _cartReference
+        .orderBy('created_at', descending: true)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docChanges.map((doc) {
+        return CartDocumentChangedModel.fromJson(doc);
+      }).toList();
     });
   }
 
@@ -52,5 +63,42 @@ class CartApiService {
   //update the product quantity in the database
   Future<void> deleteProductFromCart(String cartDocumentID) async {
     await _cartReference.doc(cartDocumentID).delete();
+  }
+
+  //make payment creates a record in the history collection and empties
+  //the cart
+  Future<void> makePaymentForCart(OrderSummaryModel order) async {
+    await _firestore.runTransaction((transaction) async {
+      //Get the current maximum assigned ID from the database
+      DocumentSnapshot orderHistoryCounterSnapshot =
+          await transaction.get(_orderHistoryCounterReference);
+
+      int currentMaxId = (orderHistoryCounterSnapshot.data()
+              as Map<String, dynamic>?)?['order_history_count'] ??
+          0;
+
+      //Increment the current max ID
+      int newOrderID = currentMaxId + 1;
+
+      // Update the counter document with the new max ID
+      transaction.update(
+          _orderHistoryCounterReference, {'order_history_count': newOrderID});
+
+      OrderSummaryModel orderItem = order.copyWith(orderID: newOrderID);
+
+      await _historyRerence
+          .withConverter<OrderSummaryModel>(
+              fromFirestore: (snapshot, _) =>
+                  OrderSummaryModel.fromJson(snapshot),
+              toFirestore: (order, _) => order.toJson())
+          .add(orderItem);
+
+      //empty the cart
+      QuerySnapshot cartSnapshot = await _cartReference.get();
+
+      for (QueryDocumentSnapshot doc in cartSnapshot.docs) {
+        transaction.delete(doc.reference);
+      }
+    });
   }
 }

@@ -15,6 +15,8 @@ class CartModel {
   final int productID;
   final String productDocumentID;
   final Key imageKey;
+  final DateTime createdAt;
+  final GlobalKey itemKey;
 
   //used to track when a cart object is updating
   final bool loading;
@@ -35,6 +37,8 @@ class CartModel {
     required this.productDocumentID,
     required this.imageKey,
     this.loading = false,
+    required this.createdAt,
+    required this.itemKey,
   });
 
   factory CartModel.fromProduct(
@@ -44,6 +48,7 @@ class CartModel {
     int id = 0,
     int quantity = 1,
     String docID = '',
+    DateTime? createdAt,
   }) {
     return CartModel(
       id: id,
@@ -58,6 +63,8 @@ class CartModel {
       productID: product.id,
       productDocumentID: product.documentID,
       imageKey: UniqueKey(),
+      itemKey: GlobalKey(),
+      createdAt: createdAt ?? DateTime.now(),
     );
   }
 
@@ -65,6 +72,8 @@ class CartModel {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return CartModel(
       id: ((data['id'] ?? 0) as num).toInt(),
+      createdAt:
+          ((data['created_at'] ?? Timestamp.now()) as Timestamp).toDate(),
       docID: doc.id,
       productName: data['product_name'] ?? '',
       brandName: data['brand_name'] ?? '',
@@ -76,6 +85,7 @@ class CartModel {
       productID: ((data['product_id'] ?? 0) as num).toInt(),
       productDocumentID: data['product_document_id'] ?? '',
       imageKey: UniqueKey(),
+      itemKey: GlobalKey(),
     );
   }
 
@@ -91,6 +101,7 @@ class CartModel {
       'image_url': imageUrl,
       'product_id': productID,
       'product_document_id': productDocumentID,
+      'created_at': Timestamp.fromDate(createdAt),
     };
   }
 
@@ -109,6 +120,8 @@ class CartModel {
     String? docID,
     Key? imageKey,
     bool? loading,
+    DateTime? createdAt,
+    GlobalKey? itemKey,
   }) {
     return CartModel(
       id: id ?? this.id,
@@ -124,6 +137,29 @@ class CartModel {
       productDocumentID: productDocumentID ?? this.productDocumentID,
       imageKey: imageKey ?? this.imageKey,
       loading: loading ?? this.loading,
+      createdAt: createdAt ?? this.createdAt,
+      itemKey: itemKey ?? this.itemKey,
+    );
+  }
+}
+
+class CartDocumentChangedModel {
+  final CartModel cartModel;
+  final DocumentChangeType type;
+  final int oldIndex;
+  final int newIndex;
+  const CartDocumentChangedModel(
+      {required this.cartModel,
+      required this.type,
+      required this.oldIndex,
+      required this.newIndex});
+
+  factory CartDocumentChangedModel.fromJson(DocumentChange doc) {
+    return CartDocumentChangedModel(
+      cartModel: CartModel.fromJson(doc.doc),
+      type: doc.type,
+      oldIndex: doc.oldIndex,
+      newIndex: doc.newIndex,
     );
   }
 }
