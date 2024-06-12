@@ -7,10 +7,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shopping_app/app/cart/data/models/cart_model.dart';
-import 'package:shopping_app/app/cart/data/repositories/cart_repository_impl.dart';
 import 'package:shopping_app/app/cart/presentation/blocs/cart_bloc/cart_bloc.dart';
 import 'package:shopping_app/app/cart/presentation/widgets/delete_confirmation_widget.dart';
-import 'package:shopping_app/app/discover/data/models/product_model.dart';
 import 'package:shopping_app/app/discover/presentation/widgets/shimmer_widget.dart';
 import 'package:shopping_app/core/common/enums/enums.dart';
 import 'package:shopping_app/core/common/widgets/app_button_widget.dart';
@@ -25,7 +23,6 @@ import 'package:shopping_app/core/routes/router.dart';
 import 'package:shopping_app/core/values/asset_manager.dart';
 import 'package:shopping_app/core/values/color_manager.dart';
 import 'package:shopping_app/core/values/string_manager.dart';
-import 'package:shopping_app/di.dart';
 import 'package:shopping_app/globals.dart';
 
 part '../widgets/cart_item_widget.dart';
@@ -38,15 +35,12 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  late List<CartModel> _items;
   @override
   void initState() {
     CartBloc bloc = context.read<CartBloc>();
     if (bloc.state.loadingError) {
       bloc.add(const CartGetCartItemsEvent());
     }
-    _items = [];
     super.initState();
   }
 
@@ -162,25 +156,7 @@ class _CartPageState extends State<CartPage> {
                     padding:
                         EdgeInsetsDirectional.symmetric(horizontal: 31.5.r),
                     onTap: () async {
-                      // context.pushNamed(RouteNames.orderSummary);
-                      final data = await getIt<CartRepository>()
-                          .addProductToCart(CartModel(
-                        itemKey: GlobalKey(),
-                        id: 50,
-                        docID: 'docID',
-                        productName: 'productName',
-                        brandName: 'brandName',
-                        color: ColorModel(color: Colors.white, name: 'White'),
-                        size: 40,
-                        price: PriceModel(
-                            amount: 100, currency: 'USD', symbol: r'$'),
-                        quantity: 2,
-                        imageUrl: 'imageUrl',
-                        productID: 1,
-                        productDocumentID: 'productDocumentID',
-                        imageKey: UniqueKey(),
-                        createdAt: DateTime.now(),
-                      ));
+                      context.pushNamed(RouteNames.orderSummary);
                     },
                   )
                 ],
