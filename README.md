@@ -25,7 +25,9 @@ A mobile app that allows users to browse and shop for various products from diff
 **Android**
 
     Everything is set. Whatever is needed would be automatically downloaded when you run the project.
+    
     Run the project
+
     ```sh
     "flutter run"
     ```
