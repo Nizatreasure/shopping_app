@@ -1,3 +1,5 @@
+//A class that holds the network request error and the exception it throws
+
 class DataFailure {
   int statusCode;
   String message;

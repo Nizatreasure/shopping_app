@@ -8,7 +8,7 @@ import 'package:shopping_app/app/discover/presentation/blocs/product_review_bloc
 import 'package:shopping_app/app/discover/presentation/widgets/product_review_widget.dart';
 import 'package:shopping_app/core/common/widgets/appbar_widget.dart';
 import 'package:shopping_app/core/common/widgets/error_widget.dart';
-import 'package:shopping_app/core/common/widgets/no_product_widget.dart';
+import 'package:shopping_app/core/common/widgets/empty_data_widget.dart';
 import 'package:shopping_app/core/constants/constants.dart';
 import 'package:shopping_app/core/values/asset_manager.dart';
 import 'package:shopping_app/core/values/color_manager.dart';

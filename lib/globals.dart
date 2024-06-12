@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'di.dart';
 import 'firebase_options.dart';
 
+//Runs before the app's first UI
 class Globals {
   static NumberFormat ratingFormat = NumberFormat('0.0');
   static NumberFormat amountFormat = NumberFormat(',##0.00');

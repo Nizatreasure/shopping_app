@@ -10,32 +10,30 @@ class NetworkRequestService {
   final ConnectionChecker _connectionChecker;
   NetworkRequestService(this._connectionChecker);
 
-  Future<void> dad() async {}
-
   Future<Either<DataFailure, Output>> makeRequest<Output>(
       {required FutureOr<Output> Function() request}) async {
+    //Checks for an internet connection before making the request
     if (await _connectionChecker.isConnected) {
-      print('internet is connected');
+      //adding a little delay because of the loader effect
       await Future.delayed(const Duration(milliseconds: 100));
-      print('internet is making request now');
       try {
+        //make the request to the server
         final response = await request();
         bool exists = true;
         if (response is DocumentSnapshot) {
           exists = response.exists;
         }
-
+        //Return Right if request was successful and left if it fails
         if (exists) {
           return Right(response);
         } else {
           return Left(DataFailure());
         }
       } catch (e) {
-        print('object $e');
         return Left(DataFailure());
       }
     } else {
-      print('internet is not connected');
+      // No stable connection
       await Future.delayed(const Duration(milliseconds: 400));
       return Left(
           DataFailure(message: 'Please check your internet connection'));

@@ -12,6 +12,7 @@ import '../../app/discover/presentation/pages/discover_page.dart';
 
 part 'route_names.dart';
 
+//Application routing using [GoRouter] package
 class MyAppRouter {
   static GoRouter router = GoRouter(
     navigatorKey: MyApp.navigatorKey,

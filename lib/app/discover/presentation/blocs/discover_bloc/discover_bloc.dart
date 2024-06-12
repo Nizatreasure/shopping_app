@@ -140,9 +140,11 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
       allProductsScrollController.jumpTo(0);
     }
     emit(state.copyWith(
-        filters: const FilterModel(),
-        filteredProductsStatus: DataStatus.initial(),
-        setFilteredProductsToNull: true));
+      filters: const FilterModel(),
+      filteredProductsStatus: DataStatus.initial(),
+      setFilteredProductsToNull: true,
+      filterActive: false,
+    ));
   }
 
   _applyFiltersEventHandler(
@@ -152,7 +154,8 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
     }
     emit(state.copyWith(
         filteredProductsStatus: DataStatus.loading(),
-        setFilteredProductsToNull: true));
+        setFilteredProductsToNull: true,
+        filterActive: true));
     final dataSate =
         await _getFilteredProductUsecase.execute(params: state.filters);
 
@@ -172,6 +175,7 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
     }
   }
 
+  // Get the brand data for product using the brand name
   BrandsModel _getProductBrandFromBrandList(BrandsModel brand) {
     String name = brand.name;
     List<BrandsModel> brands =

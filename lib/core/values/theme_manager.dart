@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../constants/constants.dart';
 import 'color_manager.dart';
 
+//Themes for the flutter application
 class ThemeManager {
   static ThemeData getLightTheme() {
     return ThemeData.light().copyWith(

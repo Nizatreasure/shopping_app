@@ -6,7 +6,7 @@ import 'package:shopping_app/app/discover/presentation/blocs/discover_bloc/disco
 import 'package:shopping_app/core/common/enums/enums.dart';
 import 'package:shopping_app/core/common/network/data_status.dart';
 import 'package:shopping_app/core/common/widgets/error_widget.dart';
-import 'package:shopping_app/core/common/widgets/no_product_widget.dart';
+import 'package:shopping_app/core/common/widgets/empty_data_widget.dart';
 
 import '../pages/discover_page.dart';
 import 'shimmer_widget.dart';

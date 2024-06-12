@@ -37,6 +37,9 @@ class _SortByFilterState extends State<SortByFilter> {
     super.initState();
   }
 
+  //Calculate the width of each item in the row so that
+  //the scroll controller can accurately move there when the
+  //item is selected
   void _measureTabWidth() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       List<double> widths = List.generate(_itemKeys.length, (index) => 0);
@@ -48,10 +51,12 @@ class _SortByFilterState extends State<SortByFilter> {
         }
       }
       _tabWidths = widths;
+
+      //if a sortBy field is previously selected and the filter page (this page)
+      //is opened again, scroll the selected item into view
       SortByModel? sortByModel =
           context.read<DiscoverBloc>().state.filters.sortBy;
       if (sortByModel != null && _scrollController.hasClients) {
-        print('got there ');
         int index = _sortByFields
             .indexWhere((element) => element.sortBy == sortByModel.sortBy);
         if (index >= 0) {
@@ -61,6 +66,7 @@ class _SortByFilterState extends State<SortByFilter> {
     });
   }
 
+  //Function that scrolls to the selected item to ensure it is in view
   void _scrollToItem(int index) {
     double position = 0.0;
     for (int i = 0; i < index; i++) {

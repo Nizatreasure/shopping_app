@@ -4,6 +4,7 @@ import 'package:shopping_app/app/discover/presentation/blocs/discover_bloc/disco
 
 import 'di.dart';
 
+//Only blocs that are provided through out the application are added here
 class AppBlocs {
   static final _blocs = [
     BlocProvider<DiscoverBloc>(create: (_) => getIt()),

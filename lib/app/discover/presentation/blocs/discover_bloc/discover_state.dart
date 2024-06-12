@@ -10,6 +10,10 @@ class DiscoverState {
   final int tabIndex;
   final FilterModel filters;
 
+  //set this to true to activate the filter
+  final bool filterActive;
+
+  bool get isFiltering => filterActive && filters.canFilter;
   //initialize the state with the default values
   //including the values ‘all‘ product tab
   const DiscoverState({
@@ -24,6 +28,7 @@ class DiscoverState {
     this.brandStatus = const DataStatus(state: DataState.initial),
     this.filteredProductsStatus = const DataStatus(state: DataState.initial),
     this.filters = const FilterModel(),
+    this.filterActive = false,
   });
 
   DiscoverState copyWith({
@@ -35,6 +40,7 @@ class DiscoverState {
     int? tabIndex,
     FilterModel? filters,
     bool setFilteredProductsToNull = false,
+    bool? filterActive,
   }) {
     return DiscoverState(
       brands: brands ?? this.brands,
@@ -47,6 +53,7 @@ class DiscoverState {
       productTabs: productTabs ?? this.productTabs,
       tabIndex: tabIndex ?? this.tabIndex,
       filters: filters ?? this.filters,
+      filterActive: filterActive ?? this.filterActive,
     );
   }
 }

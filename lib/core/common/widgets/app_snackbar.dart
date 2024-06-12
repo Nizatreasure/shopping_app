@@ -10,7 +10,7 @@ void showAppMaterialBanner(
 }) {
   ThemeData themeData = Theme.of(context);
 
-  //close the current banner if any is open
+  //close the current banner if any is open before opening another
   ScaffoldMessenger.of(context)
     ..hideCurrentMaterialBanner()
     ..showMaterialBanner(

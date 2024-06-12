@@ -22,6 +22,8 @@ import 'core/services/network_request_service.dart';
 
 final getIt = GetIt.instance;
 
+//Registering blocs, usecases, services, repositories, etc for dependency injection.
+//Make testing easy
 Future<void> initializeDependencies() async {
   //firestore
   getIt.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);

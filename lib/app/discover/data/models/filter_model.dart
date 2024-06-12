@@ -19,7 +19,8 @@ class FilterModel {
     this.color,
   });
 
-  bool get isFiltering {
+  //True if any of the filter parameters is not null
+  bool get canFilter {
     return brand != null ||
         priceRange != null ||
         sortBy != null ||

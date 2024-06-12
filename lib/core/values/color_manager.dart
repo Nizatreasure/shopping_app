@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//Color used in the applications
 class ColorManager {
   static const Color primaryBlack = Color(0xff160700);
   static const Color primaryBlack900 = Color(0xff070304);

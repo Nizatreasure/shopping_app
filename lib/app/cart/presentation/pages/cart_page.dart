@@ -17,7 +17,7 @@ import 'package:shopping_app/core/common/widgets/appbar_widget.dart';
 import 'package:shopping_app/core/common/widgets/custom_network_image.dart';
 import 'package:shopping_app/core/common/widgets/error_widget.dart';
 import 'package:shopping_app/core/common/widgets/modify_quantity_button.dart';
-import 'package:shopping_app/core/common/widgets/no_product_widget.dart';
+import 'package:shopping_app/core/common/widgets/empty_data_widget.dart';
 import 'package:shopping_app/core/constants/constants.dart';
 import 'package:shopping_app/core/routes/router.dart';
 import 'package:shopping_app/core/values/asset_manager.dart';

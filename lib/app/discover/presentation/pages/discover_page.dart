@@ -93,11 +93,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
         if (index == 0) {
           return BlocBuilder<DiscoverBloc, DiscoverState>(
               buildWhen: (previous, current) =>
-                  previous.filters.isFiltering != current.filters.isFiltering,
+                  previous.isFiltering != current.isFiltering,
               builder: (context, state) {
                 return DiscoverPageBody(
-                    filter: state.filters.isFiltering,
-                    loadingBrands: loadingBrands);
+                    filter: state.isFiltering, loadingBrands: loadingBrands);
               });
         }
         return DiscoverPageBody(loadingBrands: loadingBrands);
@@ -160,7 +159,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                       Stack(
                         children: [
                           SvgPicture.asset(AppAssetManager.filter),
-                          if (state.filters.isFiltering)
+                          if (state.isFiltering)
                             PositionedDirectional(
                               end: 0,
                               child: CircleAvatar(

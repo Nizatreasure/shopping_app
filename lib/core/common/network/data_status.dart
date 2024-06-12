@@ -1,6 +1,7 @@
 import '../enums/enums.dart';
 import 'data_failure_model.dart';
 
+//Used to determine and monitor the state of a request to the server
 class DataStatus<Input> {
   final Input? data;
   final DataFailure? exception;

@@ -1,3 +1,5 @@
+//Contains all strings used in the application
+//Make it easier if an app is to be localized
 class StringManager {
   static const String discover = 'Discover';
   static const String all = 'All';
