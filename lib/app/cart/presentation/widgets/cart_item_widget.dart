@@ -109,8 +109,14 @@ class _CartItemWidgetState extends State<CartItemWidget>
     return GestureDetector(
       onLongPress: () => _slidableController.openEndActionPane(),
       onTap: () {
-        _slidableController.close();
-        context.pushNamed(RouteNames.productDetails, extra: {
+        //if a slidable is open, close it
+        if (_slidableController.isOpen) {
+          _slidableController.close();
+          return;
+        }
+
+        //if it is not open, go to the product details page
+        context.goNamed(RouteNames.productDetails, extra: {
           'product_id': widget.cartModel?.productID,
           'document_id': widget.cartModel?.productDocumentID
         });

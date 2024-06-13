@@ -39,7 +39,7 @@ void main() {
     productDocumentID: 'productDocumentID',
     imageKey: UniqueKey(),
     createdAt: DateTime.now(),
-    itemKey: GlobalKey(),
+    itemKey: UniqueKey(),
     loading: false,
   );
 

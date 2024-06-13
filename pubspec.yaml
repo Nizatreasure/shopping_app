@@ -50,7 +50,8 @@ dependencies:
   get_it: ^7.7.0
   another_xlider:
     git: https://github.com/Nizatreasure/another_xlider.git
-  flutter_slidable: ^3.1.0
+  flutter_slidable: 
+    git: https://github.com/Nizatreasure/flutter_slidable.git
   either_dart: ^1.0.0
   internet_connection_checker: ^1.0.0+1
   shimmer: ^3.0.0

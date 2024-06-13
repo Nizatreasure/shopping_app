@@ -423,10 +423,11 @@ packages:
   flutter_slidable:
     dependency: "direct main"
     description:
-      name: flutter_slidable
-      sha256: "673403d2eeef1f9e8483bd6d8d92aae73b1d8bd71f382bc3930f699c731bc27c"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: a20eed1cd850611d513f903fb5f12bc58f8d6fe5
+      url: "https://github.com/Nizatreasure/flutter_slidable.git"
+    source: git
     version: "3.1.0"
   flutter_svg:
     dependency: "direct main"

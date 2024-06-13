@@ -17,7 +17,7 @@ class CartModel extends Equatable {
   final String productDocumentID;
   final Key imageKey;
   final DateTime createdAt;
-  final GlobalKey itemKey;
+  final UniqueKey itemKey;
 
   //used to track when a cart object is updating
   final bool loading;
@@ -64,7 +64,7 @@ class CartModel extends Equatable {
       productID: product.id,
       productDocumentID: product.documentID,
       imageKey: UniqueKey(),
-      itemKey: GlobalKey(),
+      itemKey: UniqueKey(),
       createdAt: createdAt ?? DateTime.now(),
     );
   }
@@ -86,7 +86,7 @@ class CartModel extends Equatable {
       productID: ((data['product_id'] ?? 0) as num).toInt(),
       productDocumentID: data['product_document_id'] ?? '',
       imageKey: UniqueKey(),
-      itemKey: GlobalKey(),
+      itemKey: UniqueKey(),
     );
   }
 
@@ -106,7 +106,7 @@ class CartModel extends Equatable {
       productID: ((json['product_id'] ?? 0) as num).toInt(),
       productDocumentID: json['product_document_id'] ?? '',
       imageKey: UniqueKey(),
-      itemKey: GlobalKey(),
+      itemKey: UniqueKey(),
     );
   }
 
@@ -142,7 +142,7 @@ class CartModel extends Equatable {
     Key? imageKey,
     bool? loading,
     DateTime? createdAt,
-    GlobalKey? itemKey,
+    UniqueKey? itemKey,
   }) {
     return CartModel(
       id: id ?? this.id,

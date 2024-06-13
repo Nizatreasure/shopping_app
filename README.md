@@ -87,7 +87,7 @@ I assume you have already set up Flutter. If you haven't, you can follow the ins
 ### **Challenges Faced** :wrench:
 
 Some challenges faced include:
-- _**Animating removal of items from cart**_: I used **AnimatedList** and some other widgets to achieve this. I however had some issues while updating the quantity of a particular product. Even without adding or removing from the cart list [_I was only updating the quantity of a product, not the size of the list_], I was getting an **out-of-range** error. I solved this by providing a **global key**.
+- _**Animating removal of items from cart**_: I used **AnimatedList** and some other widgets to achieve this. I however had some issues while updating the quantity of a particular product. Even without adding or removing from the cart list [_I was only updating the quantity of a product, not the size of the list_], I was getting an **out-of-range** error. I solved this by providing a **key** to the Children Widgets of **AnimatedList**.
 
 - _**Creating the shimmer effect**_: I decided to use a **shimmer effect** instead of a normal loading indicator. It took some time to implement across the application and I also had to create a custom class **ShimmerWidget** class for it.
 
@@ -130,3 +130,5 @@ Some additional features include:
 - Used **Streams** for the cart, to ensure the cart is always **up-to-date** with the database.
 
 - Double press back button to close app. This helps prevent unintentional exit.
+
+

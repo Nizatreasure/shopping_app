@@ -79,7 +79,7 @@ class _CartPageState extends State<CartPage> {
                       children: [
                         Expanded(
                           child: SlidableAutoCloseBehavior(
-                            closeWhenTapped: false,
+                            closeWhenTapped: true,
                             child: AnimatedList(
                               padding: EdgeInsetsDirectional.symmetric(
                                   vertical: 20.r),
