@@ -34,6 +34,9 @@ class _GenderFilterState extends State<GenderFilter> {
     super.initState();
   }
 
+  //Calculate the width of each item in the row so that
+  //the scroll controller can accurately move there when the
+  //item is selected
   void _measureTabWidth() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       List<double> widths = List.generate(_itemKeys.length, (index) => 0);
@@ -45,6 +48,8 @@ class _GenderFilterState extends State<GenderFilter> {
         }
       }
       _tabWidths = widths;
+      //if a gender field was previously selected and the filter page (this page)
+      //is opened again, scroll the selected item into view
       Gender? gender = context.read<DiscoverBloc>().state.filters.gender;
       if (gender != null && _scrollController.hasClients) {
         int index =
@@ -56,6 +61,7 @@ class _GenderFilterState extends State<GenderFilter> {
     });
   }
 
+  //Function that scrolls to the selected item to ensure it is in view
   void _scrollToItem(int index) {
     double position = 0.0;
     for (int i = 0; i < index; i++) {

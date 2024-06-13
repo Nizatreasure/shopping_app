@@ -92,6 +92,11 @@ class DiscoverApiService {
         .get();
   }
 
+  // Get the total product reviews. If a rating is passed,
+  //it gets all the revies with that rating
+  //
+  //Sorting the query by created time and descending to have newest reviews
+  //at the top
   Future<QuerySnapshot<ProductReviewModel>> getProductReviews(
       int productID, int? rating) async {
     Query query = _reviewReference.where('product_id', isEqualTo: productID);
@@ -107,6 +112,7 @@ class DiscoverApiService {
         .get();
   }
 
+  //Gets the top three rated comments for a particular product
   Future<QuerySnapshot<ProductReviewModel>> getTopThreeReviews(int productID) {
     return _reviewReference
         .where('product_id', isEqualTo: productID)

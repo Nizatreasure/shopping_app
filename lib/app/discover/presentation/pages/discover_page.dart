@@ -1,7 +1,9 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shopping_app/app/cart/presentation/blocs/cart_bloc/cart_bloc.dart';
 import 'package:shopping_app/app/discover/data/models/product_model.dart';
@@ -29,11 +31,33 @@ class DiscoverPage extends StatefulWidget {
 }
 
 class _DiscoverPageState extends State<DiscoverPage> {
+  DateTime? _currentBackPressTime;
   @override
   void initState() {
     context.read<DiscoverBloc>().add(const DiscoverGetBrandsEvent());
     context.read<CartBloc>().add(const CartGetCartItemsEvent());
+    BackButtonInterceptor.add(myInterceptor);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    //tell users to press the back button again to close the app
+    if ((_currentBackPressTime == null ||
+        DateTime.now().difference(_currentBackPressTime!).inSeconds > 2)) {
+      _currentBackPressTime = DateTime.now();
+      Fluttertoast.showToast(
+        msg: StringManager.pressAgainToCloseApp,
+        gravity: ToastGravity.CENTER,
+      );
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -145,7 +169,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
         buildWhen: (previous, current) =>
             previous.productTabs[0].status != current.productTabs[0].status ||
             previous.tabIndex != current.tabIndex ||
-            previous.filters != current.filters,
+            previous.filters != current.filters ||
+            previous.isFiltering != current.isFiltering,
         builder: (context, state) {
           return state.tabIndex == 0 &&
                   state.productTabs[0].status.state == DataState.success

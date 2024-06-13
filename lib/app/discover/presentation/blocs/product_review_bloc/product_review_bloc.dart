@@ -75,6 +75,4 @@ class ProductReviewBloc extends Bloc<ProductReviewEvent, ProductReviewState> {
     emit(state.copyWith(tabIndex: event.index));
     add(ProductReviewGetReviewEvent(event.index));
   }
-
-  // _getProductReviews(ProductReviewGetReviewEvent event , Emitter<ProductReviewState> emit) {}
 }

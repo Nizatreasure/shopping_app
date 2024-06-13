@@ -37,6 +37,9 @@ class _AppColorFilterState extends State<AppColorFilter> {
     super.initState();
   }
 
+  //Calculate the width of each item in the row so that
+  //the scroll controller can accurately move there when the
+  //item is selected
   void _measureTabWidth() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       List<double> widths = List.generate(_itemKeys.length, (index) => 0);
@@ -48,6 +51,8 @@ class _AppColorFilterState extends State<AppColorFilter> {
         }
       }
       _tabWidths = widths;
+      //if a color field was previously selected and the filter page (this page)
+      //is opened again, scroll the selected item into view
       ColorModel? colorModel = context.read<DiscoverBloc>().state.filters.color;
       if (colorModel != null && _scrollController.hasClients) {
         int index = _colorFields

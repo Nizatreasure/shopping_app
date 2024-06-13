@@ -65,6 +65,7 @@ class StringManager {
   static const String processing = 'Processing';
   static const String pleaseWait = 'Please wait';
   static const String paymentSuccessful = 'Payment successful';
+  static const String pressAgainToCloseApp = 'Press again to close app';
   static const String addingToCart = 'Adding to cart';
   static const String selectProductColor = 'Please select a product color';
   static const String selectProductSize = 'Please select a product size';

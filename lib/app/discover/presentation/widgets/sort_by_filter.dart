@@ -52,7 +52,7 @@ class _SortByFilterState extends State<SortByFilter> {
       }
       _tabWidths = widths;
 
-      //if a sortBy field is previously selected and the filter page (this page)
+      //if a sortBy field was previously selected and the filter page (this page)
       //is opened again, scroll the selected item into view
       SortByModel? sortByModel =
           context.read<DiscoverBloc>().state.filters.sortBy;

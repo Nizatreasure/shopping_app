@@ -21,6 +21,9 @@ class _BrandsFilterWidgetState extends State<BrandsFilterWidget> {
     super.initState();
   }
 
+  //Calculate the width of each item in the row so that
+  //the scroll controller can accurately move there when the
+  //item is selected
   void _measureTabWidth() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       List<double> widths = List.generate(_itemKeys.length, (index) => 0);
@@ -33,6 +36,8 @@ class _BrandsFilterWidgetState extends State<BrandsFilterWidget> {
       }
       _tabWidths = widths;
       DiscoverState state = context.read<DiscoverBloc>().state;
+      //if a brand was previously selected and the filter page (this page)
+      //is opened again, scroll the selected item into view
       BrandsModel? brandModel = state.filters.brand;
       if (brandModel != null && _scrollController.hasClients) {
         int index = state.brands
@@ -44,6 +49,7 @@ class _BrandsFilterWidgetState extends State<BrandsFilterWidget> {
     });
   }
 
+  //Function that scrolls to the selected item to ensure it is in view
   void _scrollToItem(int index) {
     double position = 0.0;
     for (int i = 0; i < index; i++) {

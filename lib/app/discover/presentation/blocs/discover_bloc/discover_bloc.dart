@@ -58,6 +58,7 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
       );
       add(const DiscoverGetProductListEvent(0));
     } else {
+      //emit the failed state
       emit(state.copyWith(
           brandStatus: DataStatus.failure(exception: dataSate.left),
           productTabs: List.from(state.productTabs)
@@ -95,6 +96,8 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
             ..[index] = state.productTabs[index].copyWith(
               product: dataSate.right.docs
                   .map((product) => product.data().copyWith(
+                      //get the product brand details from the brand list before
+                      //adding adding the brand and updating the state
                       brand:
                           _getProductBrandFromBrandList(product.data().brand)))
                   .toList(),
@@ -152,10 +155,14 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
     if (allProductsScrollController.hasClients) {
       allProductsScrollController.jumpTo(0);
     }
-    emit(state.copyWith(
-        filteredProductsStatus: DataStatus.loading(),
-        setFilteredProductsToNull: true,
-        filterActive: true));
+    //set active filter to true and reset the filtered products to null before,
+    //making the request
+    emit(
+      state.copyWith(
+          filteredProductsStatus: DataStatus.loading(),
+          setFilteredProductsToNull: true,
+          filterActive: true),
+    );
     final dataSate =
         await _getFilteredProductUsecase.execute(params: state.filters);
 
