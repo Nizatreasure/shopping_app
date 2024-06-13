@@ -69,7 +69,6 @@ class DiscoverApiService {
 
     if (filter.color != null) {
       query = query.where('colors', arrayContains: filter.color!.toJson());
-      ;
     }
 
     if (filter.brand != null) {
