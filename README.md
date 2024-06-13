@@ -55,6 +55,8 @@ flutter run
 
 **NOTE:** An active device (emulator or real) must be connected. A stable internet connection is required. A MacBook is necessary to run the project on iOS.
 
+I assume you have already set up Flutter. If you haven't, you can follow the instructions [here.](https://docs.flutter.dev/get-started/install) 
+
 <br>
 
 ### **Assumptions Made** :memo:
