@@ -47,18 +47,27 @@ class _DiscoverPageState extends State<DiscoverPage> {
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    //tell users to press the back button again to close the app
+    //The path of the topmost route in GoRouter's state
     final String location = GoRouterState.of(context).topRoute!.path;
+
+    //This should only show up if the current route is the base route i.e
+    //if the path is "/"
+    //
+    //The user has to press the back button 2x with 2 seconds in order to close the app
     if (location == '/' &&
         (_currentBackPressTime == null ||
             DateTime.now().difference(_currentBackPressTime!).inSeconds > 2)) {
       _currentBackPressTime = DateTime.now();
+
+      //tell users to press the back button again to close the app
       Fluttertoast.showToast(
         msg: StringManager.pressAgainToCloseApp,
         gravity: ToastGravity.CENTER,
       );
+      //true prevents the page from closing
       return true;
     }
+    //false allows the page to close
     return false;
   }
 

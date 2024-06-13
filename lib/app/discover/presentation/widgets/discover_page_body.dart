@@ -12,7 +12,11 @@ import '../pages/discover_page.dart';
 import 'shimmer_widget.dart';
 
 class DiscoverPageBody extends StatelessWidget {
+  //Filter only affects the "All" tab, hence this value is false for
+  //all other brand tabs but can be true for the "All" tab
   final bool filter;
+
+  //required for the shimmer effect
   final bool loadingBrands;
   const DiscoverPageBody(
       {super.key, this.filter = false, required this.loadingBrands});
