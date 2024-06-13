@@ -48,8 +48,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     //tell users to press the back button again to close the app
-    if ((_currentBackPressTime == null ||
-        DateTime.now().difference(_currentBackPressTime!).inSeconds > 2)) {
+    final String location = GoRouterState.of(context).topRoute!.path;
+    if (location == '/' &&
+        (_currentBackPressTime == null ||
+            DateTime.now().difference(_currentBackPressTime!).inSeconds > 2)) {
       _currentBackPressTime = DateTime.now();
       Fluttertoast.showToast(
         msg: StringManager.pressAgainToCloseApp,
