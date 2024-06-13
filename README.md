@@ -7,18 +7,18 @@ A mobile app that allows users to browse and shop for various products from diff
 1. **Clone the repository from github**
 
    ```sh
-   "git clone https://github.com/Nizatreasure/shopping_app.git"
+   git clone https://github.com/Nizatreasure/shopping_app.git
    ```
 
 2. **Navigate to the project folder**
 
    ```sh
-   "cd shopping_app"
+   cd shopping_app
    ```
 
 3. **Install dependencies**
    ```sh
-   "flutter pub get"
+   flutter pub get
    ```
 <br>
 
@@ -29,7 +29,7 @@ Everything is set. Whatever is needed would be automatically downloaded when you
 Run the project using
 
 ```sh
-"flutter run"
+flutter run
 ```
 <br>
 
@@ -37,20 +37,20 @@ Run the project using
 
 Navigate into the ios folder by running
 ```sh
-"cd ios" 
+cd ios
 ```
 To install dependencies and update your local pod file run
 ```sh
-"pod install --repo-update" 
+pod install --repo-update
 ```
 Navigate back to the project directory by running
 ```sh
-"cd .."
+cd ..
 ```
 
 Run the project using 
 ```sh
-"flutter run"
+flutter run
 ```
 
 **NOTE:** An active device (emulator or real) must be connected. A stable internet connection is required. A MacBook is necessary to run the project on iOS.
